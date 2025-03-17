@@ -67,7 +67,7 @@ export const VisuallyHiddenInput = styled('input')({
 
 export const PlayerList = styled(List)(({ theme }) => ({
     overflow: 'auto',
-    maxHeight: '70vh',
+    maxHeight: '66vh',
     paddingLeft: 0,
     paddingRight: 0,
 }));

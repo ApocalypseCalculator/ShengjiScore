@@ -3,7 +3,7 @@ import { Card, GameDataContainer, VisuallyHiddenInput, PlayerList, PlayerListIte
 import AppTheme from './theme/AppTheme';
 import ColorModeSelect from './theme/ColorModeSelect';
 import LanguageSelect from './theme/LanguageSelect';
-import { Select, InputLabel, MenuItem, ListItemAvatar, ListItemText, IconButton, Menu, TextField, FormControl, Divider, CssBaseline, Typography, Box, Button, Dialog, DialogActions, DialogTitle, DialogContent, DialogContentText, Tooltip } from '@mui/material';
+import { Select, InputLabel, MenuItem, ListItemAvatar, ListItemText, IconButton, Menu, TextField, FormControl, Divider, Chip, CssBaseline, Typography, Box, Button, Dialog, DialogActions, DialogTitle, DialogContent, DialogContentText, Tooltip } from '@mui/material';
 import { Delete, Remove, Add, Edit, Check, Close, FileUpload, FileDownload, AddBox, MoreVert } from '@mui/icons-material';
 
 import useMediaQuery from '@mui/material/useMediaQuery';
@@ -12,7 +12,7 @@ import { useTheme } from '@mui/material/styles';
 import { GameDataMap, GameData, Player, initGameData, createPlayer } from './data';
 
 import { uniqueNamesGenerator, adjectives, colors, animals } from 'unique-names-generator';
-import { getCardImgUrl, getNextScore, getCardStr } from './utils';
+import { getCardImgUrl, getNextScore, getCardStr, hasPenalty, hasWin } from './utils';
 
 import { LanguageContext } from './theme/LanguageSelect';
 
@@ -285,7 +285,7 @@ export default function ScoreCounter(props: { disableCustomTheme?: boolean }) {
                                                     }
                                                 >
                                                     <ListItemAvatar>
-                                                        <img className='card' src={getCardImgUrl(player.score, i)} onClick={(e) => e.preventDefault()}
+                                                        <img className='card' src={getCardImgUrl(player, i)} onClick={(e) => e.preventDefault()}
                                                             onTouchStart={(e) => e.preventDefault()}>
                                                         </img>
                                                     </ListItemAvatar>
@@ -337,7 +337,25 @@ export default function ScoreCounter(props: { disableCustomTheme?: boolean }) {
 
                                                         }
                                                         secondary={<Typography style={{ fontWeight: 'normal' }} variant="body2" component="div">
-                                                            {i18n?.text.ROUND} {player.round}, {i18n?.text.PLAYING} {getCardStr(player.score)}
+                                                            {i18n?.text.ROUND} {player.round}, {i18n?.text.PLAYING} {getCardStr(player)}
+                                                            {
+                                                                hasPenalty(player) > 0 ? <>
+                                                                    <Typography variant="caption" component="span">
+                                                                        -{hasPenalty(player)}
+                                                                    </Typography>
+                                                                    <div>
+                                                                        <Chip label="Penalty" color="error" />
+                                                                    </div></> : <></>
+                                                            }
+                                                            {
+                                                                hasWin(player) > 0 ? <>
+                                                                    <Typography variant="caption" component="span">
+                                                                        +{hasWin(player)}
+                                                                    </Typography>
+                                                                    <div>
+                                                                        <Chip label="Win" color="success" />
+                                                                    </div></> : <></>
+                                                            }
                                                         </Typography>}
                                                     />
                                                 </PlayerListItem>
@@ -347,7 +365,7 @@ export default function ScoreCounter(props: { disableCustomTheme?: boolean }) {
                                 </PlayerList>
                             </>
                     }
-                    <Divider />
+                    {smallScreen ? <></> : <Divider />}
                     <BottomBox display={'flex'} flexDirection={'row'} justifyContent={'space-between'}>
                         <Box display={'flex'} flexDirection={'row'} gap={2}>
                             <Button variant="outlined" aria-label="add-player" startIcon={<AddBox />} style={currentGame === "" ? { display: 'none' } : {}} onClick={() => {
