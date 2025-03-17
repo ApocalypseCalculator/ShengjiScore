@@ -1,10 +1,13 @@
 import * as React from 'react';
-import { Card, GameDataContainer, VisuallyHiddenInput } from './styled';
+import { Card, GameDataContainer, VisuallyHiddenInput, PlayerList, PlayerListItem, BottomBox } from './styled';
 import AppTheme from './theme/AppTheme';
 import ColorModeSelect from './theme/ColorModeSelect';
 import LanguageSelect from './theme/LanguageSelect';
-import { Select, InputLabel, MenuItem, List, ListItem, ListItemAvatar, ListItemText, IconButton, Menu, TextField, FormControl, Divider, CssBaseline, Typography, Box, Button, Dialog, DialogActions, DialogTitle, DialogContent, DialogContentText, Tooltip } from '@mui/material';
+import { Select, InputLabel, MenuItem, ListItemAvatar, ListItemText, IconButton, Menu, TextField, FormControl, Divider, CssBaseline, Typography, Box, Button, Dialog, DialogActions, DialogTitle, DialogContent, DialogContentText, Tooltip } from '@mui/material';
 import { Delete, Remove, Add, Edit, Check, Close, FileUpload, FileDownload, AddBox, MoreVert } from '@mui/icons-material';
+
+import useMediaQuery from '@mui/material/useMediaQuery';
+import { useTheme } from '@mui/material/styles';
 
 import { GameDataMap, GameData, Player, initGameData, createPlayer } from './data';
 
@@ -27,6 +30,9 @@ export default function ScoreCounter(props: { disableCustomTheme?: boolean }) {
     const [editingPlayerNameValue, setEditingPlayerNameValue] = React.useState("");
 
     const [openLoadError, setOpenLoadError] = React.useState(false);
+
+    const theme = useTheme();
+    const smallScreen = useMediaQuery(theme.breakpoints.down('md'));
 
     function initScoreboard() {
         let gamekeys = Array.from(GLOBAL_GAME_DATA.keys()).reverse();
@@ -133,7 +139,6 @@ export default function ScoreCounter(props: { disableCustomTheme?: boolean }) {
                     <Typography
                         component="h1"
                         variant="h4"
-                        sx={{ width: '100%', fontSize: 'clamp(2rem, 10vw, 2.15rem)' }}
                     >
                         {i18n?.text.TITLE}
                     </Typography>
@@ -211,7 +216,7 @@ export default function ScoreCounter(props: { disableCustomTheme?: boolean }) {
                                                 </Tooltip>
                                             </Box>
                                             :
-                                            <Typography variant="h5" component="div">
+                                            <Typography variant="h6" component="div">
                                                 {currentGame}
                                                 <Tooltip title={i18n?.text.EDIT_NAME}>
                                                     <IconButton style={{ marginLeft: '1rem' }} aria-label="edit" size={'small'} onClick={() => {
@@ -224,31 +229,31 @@ export default function ScoreCounter(props: { disableCustomTheme?: boolean }) {
                                             </Typography>
                                     }
                                 </Box>
-                                <List dense={false} sx={{ overflow: 'auto', maxHeight: '70vh' }}>
+                                <PlayerList dense={smallScreen}>
                                     {
                                         currentGameData?.players.map((player: Player, i) => {
                                             return (
-                                                <ListItem
+                                                <PlayerListItem
                                                     key={i}
                                                     secondaryAction={
                                                         editingPlayerName != i ?
-                                                            <Box display={'flex'} gap={3}>
+                                                            <Box display={'flex'} gap={smallScreen ? 1 : 3}>
                                                                 <Tooltip title={i18n?.text.ADD_LEVEL}>
-                                                                    <IconButton edge="end" aria-label="add" onClick={() => {
+                                                                    <IconButton size={smallScreen ? 'small' : 'medium'} edge="end" aria-label="add" onClick={() => {
                                                                         addScore(i, true);
                                                                     }}>
                                                                         <Add />
                                                                     </IconButton>
                                                                 </Tooltip>
                                                                 <Tooltip title={i18n?.text.SUBTRACT_LEVEL}>
-                                                                    <IconButton edge="end" aria-label="remove" onClick={() => {
+                                                                    <IconButton size={smallScreen ? 'small' : 'medium'} edge="end" aria-label="remove" onClick={() => {
                                                                         addScore(i, false);
                                                                     }}>
                                                                         <Remove />
                                                                     </IconButton>
                                                                 </Tooltip>
                                                                 <Tooltip title={i18n?.text.MORE_OPTIONS}>
-                                                                    <IconButton edge="end" aria-label="moreoptions" onClick={(ev) => {
+                                                                    <IconButton size={smallScreen ? 'small' : 'medium'} edge="end" aria-label="moreoptions" onClick={(ev) => {
                                                                         handleOpenPlayerMenu(i, ev);
                                                                     }}>
                                                                         <MoreVert />
@@ -280,7 +285,8 @@ export default function ScoreCounter(props: { disableCustomTheme?: boolean }) {
                                                     }
                                                 >
                                                     <ListItemAvatar>
-                                                        <img className='card' src={getCardImgUrl(player.score, i)}>
+                                                        <img className='card' src={getCardImgUrl(player.score, i)} onClick={(e) => e.preventDefault()}
+                                                            onTouchStart={(e) => e.preventDefault()}>
                                                         </img>
                                                     </ListItemAvatar>
                                                     <ListItemText
@@ -334,15 +340,15 @@ export default function ScoreCounter(props: { disableCustomTheme?: boolean }) {
                                                             {i18n?.text.ROUND} {player.round}, {i18n?.text.PLAYING} {getCardStr(player.score)}
                                                         </Typography>}
                                                     />
-                                                </ListItem>
+                                                </PlayerListItem>
                                             )
                                         })
                                     }
-                                </List>
+                                </PlayerList>
                             </>
                     }
                     <Divider />
-                    <Box display={'flex'} flexDirection={'row'} justifyContent={'space-between'}>
+                    <BottomBox display={'flex'} flexDirection={'row'} justifyContent={'space-between'}>
                         <Box display={'flex'} flexDirection={'row'} gap={2}>
                             <Button variant="outlined" aria-label="add-player" startIcon={<AddBox />} style={currentGame === "" ? { display: 'none' } : {}} onClick={() => {
                                 setCurrentGameData((prev) => {
@@ -406,7 +412,7 @@ export default function ScoreCounter(props: { disableCustomTheme?: boolean }) {
                                 </IconButton>
                             </Tooltip>
                         </Box>
-                    </Box>
+                    </BottomBox>
                 </Card>
                 <Dialog
                     open={openLoadError}
