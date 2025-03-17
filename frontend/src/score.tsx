@@ -296,8 +296,7 @@ export default function ScoreCounter(props: { disableCustomTheme?: boolean }) {
                                                     }
                                                 >
                                                     <ListItemAvatar>
-                                                        <img className='card' src={getCardImgUrl(player, i)} onClick={(e) => e.preventDefault()}
-                                                            onTouchStart={(e) => e.preventDefault()}>
+                                                        <img className='card' src={getCardImgUrl(player, i)}>
                                                         </img>
                                                     </ListItemAvatar>
                                                     <ListItemText
