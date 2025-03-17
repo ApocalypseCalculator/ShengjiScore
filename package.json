@@ -1,0 +1,11 @@
+{
+    "name": "shengji-score-counter-server",
+    "version": "1.0.0",
+    "author": "ApocalypseCalculator",
+    "license": "Apache-2.0",
+    "description": "Static server for shengji-score-counter",
+    "dependencies": {
+        "express": "^4.21.2"
+    },
+    "main": "server.js"
+}
