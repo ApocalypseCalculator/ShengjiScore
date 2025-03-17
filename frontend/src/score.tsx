@@ -3,7 +3,7 @@ import { Card, GameDataContainer, VisuallyHiddenInput, PlayerList, PlayerListIte
 import AppTheme from './theme/AppTheme';
 import ColorModeSelect from './theme/ColorModeSelect';
 import LanguageSelect from './theme/LanguageSelect';
-import { Select, InputLabel, MenuItem, ListItemAvatar, ListItemText, IconButton, Menu, TextField, FormControl, Divider, Chip, CssBaseline, Typography, Box, Button, Dialog, DialogActions, DialogTitle, DialogContent, DialogContentText, Tooltip } from '@mui/material';
+import { Select, InputLabel, MenuItem, ListItemAvatar, ListItemText, IconButton, Menu, TextField, FormControl, Divider, Chip, CssBaseline, Typography, Box, Button, Dialog, DialogActions, DialogTitle, DialogContent, DialogContentText, Tooltip, Badge } from '@mui/material';
 import { Delete, Remove, Add, Edit, Check, Close, FileUpload, FileDownload, AddBox, MoreVert } from '@mui/icons-material';
 
 import useMediaQuery from '@mui/material/useMediaQuery';
@@ -12,7 +12,7 @@ import { useTheme } from '@mui/material/styles';
 import { GameDataMap, GameData, Player, initGameData, createPlayer } from './data';
 
 import { uniqueNamesGenerator, adjectives, colors, animals } from 'unique-names-generator';
-import { getCardImgUrl, getNextScore, getCardStr, hasPenalty, hasWin } from './utils';
+import { getCardImgUrl, getNextScore, getCardStr, hasPenalty, hasWin, getWinningPlayerIdx } from './utils';
 
 import { LanguageContext } from './theme/LanguageSelect';
 
@@ -28,6 +28,8 @@ export default function ScoreCounter(props: { disableCustomTheme?: boolean }) {
     const [editingNameError, setEditingNameError] = React.useState(false);
     const [editingPlayerName, setEditingPlayerName] = React.useState(-1);
     const [editingPlayerNameValue, setEditingPlayerNameValue] = React.useState("");
+
+    const [currentWinner, setCurrentWinner] = React.useState(-1);
 
     const [openLoadError, setOpenLoadError] = React.useState(false);
 
@@ -47,6 +49,15 @@ export default function ScoreCounter(props: { disableCustomTheme?: boolean }) {
         GLOBAL_GAME_DATA.loadFromStorage();
         initScoreboard();
     }, []);
+
+    React.useEffect(() => {
+        if (currentGameData) {
+            setCurrentWinner(getWinningPlayerIdx(currentGameData.players));
+        }
+        else {
+            setCurrentWinner(-1);
+        }
+    }, [currentGameData]);
 
     function updateCurrentGame(game: string) {
         if (game === "New Game") {
@@ -331,9 +342,11 @@ export default function ScoreCounter(props: { disableCustomTheme?: boolean }) {
                                                                     </Tooltip>
                                                                 </Box>
                                                                 :
-                                                                <Typography variant="h6" component="div">
-                                                                    {player.name}
-                                                                </Typography>
+                                                                <Badge className={"leader-badge"} badgeContent={"LEAD"} color="secondary" invisible={currentWinner !== i}>
+                                                                    <Typography variant="h6" component="div">
+                                                                        {player.name}
+                                                                    </Typography>
+                                                                </Badge>
 
                                                         }
                                                         secondary={<Typography style={{ fontWeight: 'normal' }} variant="body2" component="div">
