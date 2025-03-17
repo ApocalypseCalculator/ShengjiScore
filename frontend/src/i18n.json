@@ -1,0 +1,106 @@
+{
+    "TITLE": {
+        "en": "Shengji Score Counter",
+        "zh": "升级记分器"
+    },
+    "CUR_GAME": {
+        "en": "Current Game",
+        "zh": "当前局"
+    },
+    "NEW_GAME": {
+        "en": "New Game",
+        "zh": "新局"
+    },
+    "NAME_IN_USE": {
+        "en": "Name already exists",
+        "zh": "名字已被使用"
+    },
+    "ASSIGN_NAME": {
+        "en": "Assign a name to this game",
+        "zh": "给这局起个名字"
+    },
+    "GAME_NAME": {
+        "en": "Game name",
+        "zh": "局名"
+    },
+    "EDIT_NAME": {
+        "en": "Edit name",
+        "zh": "编辑名字"
+    },
+    "DELETE": {
+        "en": "Delete",
+        "zh": "删除"
+    },
+    "ADD_PLAYER": {
+        "en": "Add player",
+        "zh": "添加玩家"
+    },
+    "PLAYER_NAME": {
+        "en": "Player name",
+        "zh": "玩家名字"
+    },
+    "DELETE_GAME": {
+        "en": "Delete game",
+        "zh": "删除此局"
+    },
+    "IMPORT_ERROR": {
+        "en": "Import data could not be loaded. Please check the file and try again.",
+        "zh": "导入数据无法加载。请检查文件并重试。"
+    },
+    "OK": {
+        "en": "OK",
+        "zh": "知道了"
+    },
+    "ERROR": {
+        "en": "Error",
+        "zh": "错误"
+    },
+    "ROUND": {
+        "en": "Round",
+        "zh": "轮数"
+    },
+    "PLAYING": {
+        "en": "Playing",
+        "zh": "级别"
+    },
+    "SYSTEM": {
+        "en": "System",
+        "zh": "系统"
+    },
+    "LIGHT": {
+        "en": "Light",
+        "zh": "浅色"
+    },
+    "DARK": {
+        "en": "Dark",
+        "zh": "深色"
+    },
+    "ADD_LEVEL": {
+        "en": "Add level",
+        "zh": "升级"
+    },
+    "SUBTRACT_LEVEL": {
+        "en": "Subtract level",
+        "zh": "降级"
+    },
+    "MORE_OPTIONS": {
+        "en": "More options",
+        "zh": "更多选项"
+    },
+    "EXPORT": {
+        "en": "Export",
+        "zh": "导出"
+    },
+    "IMPORT": {
+        "en": "Import",
+        "zh": "导入"
+    },
+    "CONFIRM": {
+        "en": "Confirm",
+        "zh": "确认"
+    },
+    "CANCEL": {
+        "en": "Cancel",
+        "zh": "取消"
+    }
+}
