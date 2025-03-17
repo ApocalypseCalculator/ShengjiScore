@@ -3,6 +3,7 @@ import * as ReactDOM from 'react-dom/client';
 import { StyledEngineProvider } from '@mui/material/styles';
 import App from './score';
 import { LanguageProvider } from './theme/LanguageSelect';
+import * as serviceWorkerRegistration from './serviceWorkerRegistration';
 
 const templates = require.context('../public/svg', true, /\.(svg)$/);
 
@@ -26,3 +27,5 @@ ReactDOM.createRoot(document.querySelector("#root")!).render(
     <PreloadCards />
   </>
 );
+
+serviceWorkerRegistration.register();
