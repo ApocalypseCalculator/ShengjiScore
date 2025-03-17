@@ -9,7 +9,7 @@
     },
     "NEW_GAME": {
         "en": "New Game",
-        "zh": "新局"
+        "zh": "新开局"
     },
     "NAME_IN_USE": {
         "en": "Name already exists",
@@ -102,5 +102,17 @@
     "CANCEL": {
         "en": "Cancel",
         "zh": "取消"
+    },
+    "LEAD": {
+        "en": "LEAD",
+        "zh": "领先"
+    },
+    "PENALTY": {
+        "en": "Penalty",
+        "zh": "负数级"
+    },
+    "WIN": {
+        "en": "Win",
+        "zh": "胜者"
     }
 }

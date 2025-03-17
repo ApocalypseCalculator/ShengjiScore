@@ -342,7 +342,7 @@ export default function ScoreCounter(props: { disableCustomTheme?: boolean }) {
                                                                     </Tooltip>
                                                                 </Box>
                                                                 :
-                                                                <Badge className={"leader-badge"} badgeContent={"LEAD"} color="secondary" invisible={currentWinner !== i}>
+                                                                <Badge className={"leader-badge"} badgeContent={i18n?.text.LEAD} color="secondary" invisible={currentWinner !== i}>
                                                                     <Typography variant="h6" component="div">
                                                                         {player.name}
                                                                     </Typography>
@@ -357,7 +357,7 @@ export default function ScoreCounter(props: { disableCustomTheme?: boolean }) {
                                                                         -{hasPenalty(player)}
                                                                     </Typography>
                                                                     <div>
-                                                                        <Chip label="Penalty" color="error" />
+                                                                        <Chip label={i18n?.text.PENALTY} color="error" />
                                                                     </div></> : <></>
                                                             }
                                                             {
@@ -366,7 +366,7 @@ export default function ScoreCounter(props: { disableCustomTheme?: boolean }) {
                                                                         +{hasWin(player)}
                                                                     </Typography>
                                                                     <div>
-                                                                        <Chip label="Win" color="success" />
+                                                                        <Chip label={i18n?.text.WIN} color="success" />
                                                                     </div></> : <></>
                                                             }
                                                         </Typography>}
