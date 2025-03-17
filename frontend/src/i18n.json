@@ -55,9 +55,13 @@
         "en": "Error",
         "zh": "错误"
     },
-    "ROUND": {
+    "ROUND_P1": {
         "en": "Round",
-        "zh": "轮数"
+        "zh": "第"
+    },
+    "ROUND_P2": {
+        "en": "",
+        "zh": " 轮"
     },
     "PLAYING": {
         "en": "Playing",

@@ -349,7 +349,7 @@ export default function ScoreCounter(props: { disableCustomTheme?: boolean }) {
 
                                                         }
                                                         secondary={<Typography style={{ fontWeight: 'normal' }} variant="body2" component="div">
-                                                            {i18n?.text.ROUND} {player.round}, {i18n?.text.PLAYING} {getCardStr(player)}
+                                                            {i18n?.text.ROUND_P1} {player.round}{i18n?.text.ROUND_P2}, {i18n?.text.PLAYING} {getCardStr(player)}
                                                             {
                                                                 hasPenalty(player) > 0 ? <>
                                                                     <Typography variant="caption" component="span">
