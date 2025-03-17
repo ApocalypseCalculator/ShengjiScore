@@ -3,8 +3,6 @@ import { saveAs } from 'file-saver';
 
 const LOCAL_STORAGE_KEY = 'gameData';
 
-export type GameDataMape = Map<string, GameData>;
-
 let timeoutId: number | null = null;
 const debounce = (callback: any, wait: number) => {
     return (...args: any[]) => {
@@ -19,7 +17,6 @@ const debounce = (callback: any, wait: number) => {
 }
 
 export class GameDataMap extends Map<string, GameData> {
-    #edited: boolean = false;
     constructor() {
         super();
         super.get
