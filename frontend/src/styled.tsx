@@ -10,7 +10,7 @@ export const Card = styled(MuiCard)(({ theme }) => ({
     width: '100%',
     [theme.breakpoints.down('md')]: {
         padding: theme.spacing(2),
-        marginTop: theme.spacing(1),
+        marginTop: theme.spacing(0.2),
         gap: theme.spacing(1.5),
     },
     [theme.breakpoints.up('md')]: {

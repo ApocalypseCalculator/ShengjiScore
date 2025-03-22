@@ -126,5 +126,9 @@
     "IMPORT_EXPORT": {
         "en": "Import/Export",
         "zh": "导入/导出"
+    },
+    "ACTIONS": {
+        "en": "Actions",
+        "zh": "更多选项"
     }
 }

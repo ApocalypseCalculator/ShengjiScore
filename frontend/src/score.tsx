@@ -16,6 +16,7 @@ import { LanguageContext } from './theme/LanguageSelect';
 
 import Settings from './components/settings';
 import ImportExport from './components/importexport';
+import ActionsMenu from './components/actions';
 
 const GLOBAL_GAME_DATA = new GameDataMap();
 
@@ -377,8 +378,10 @@ export default function ScoreCounter(props: { disableCustomTheme?: boolean }) {
                     }
                     {smallScreen ? <></> : <Divider />}
                     <BottomBox display={'flex'} flexDirection={'row'} justifyContent={'space-between'}>
-                        <Box display={'flex'} flexDirection={'row'} gap={2}>
-                            <Button variant="outlined" aria-label="add-player" startIcon={<AddBox />} style={currentGame === "" ? { display: 'none' } : {}} onClick={() => {
+                        <ActionsMenu
+                            smallScreen={smallScreen}
+                            showMenu={currentGame !== ""}
+                            onAdd={() => {
                                 setCurrentGameData((prev) => {
                                     if (!prev) return prev;
                                     let newstate = { ...prev };
@@ -386,19 +389,15 @@ export default function ScoreCounter(props: { disableCustomTheme?: boolean }) {
                                     GLOBAL_GAME_DATA.set(currentGame, newstate);
                                     return newstate;
                                 });
-                            }}>
-                                {i18n?.text.ADD_PLAYER}
-                            </Button >
-                            <Button variant="outlined" aria-label="add-player" startIcon={<Delete />} style={currentGame === "" ? { display: 'none' } : {}} onClick={() => {
+                            }}
+                            onDelete={() => {
                                 setGameKeys((prev) => prev.filter((key) => key !== currentGame));
                                 setCurrentGameData(undefined);
                                 GLOBAL_GAME_DATA.delete(currentGame);
                                 setCurrentGame("");
                                 initScoreboard();
-                            }}>
-                                {i18n?.text.DELETE_GAME}
-                            </Button >
-                        </Box>
+                            }}
+                        />
                         <ImportExport smallScreen={smallScreen} onFileChange={(event) => {
                             if (!event.target.files) return;
                             if (event.target.files?.length > 0) {
