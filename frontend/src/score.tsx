@@ -244,6 +244,7 @@ export default function ScoreCounter(props: { disableCustomTheme?: boolean }) {
                                                                     label={i18n?.text.PLAYER_NAME}
                                                                     variant="outlined"
                                                                     value={editingPlayerNameValue}
+                                                                    autoFocus={true}
                                                                     onChange={(e) => { setEditingPlayerNameValue(e.target.value) }}
                                                                     fullWidth
                                                                     onKeyDown={(e) => {

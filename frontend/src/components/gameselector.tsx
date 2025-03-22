@@ -1,52 +1,10 @@
 import * as React from 'react';
 
-import { Box, FormControl, InputLabel, Select, Divider, MenuItem, TextField, Tooltip, IconButton, Typography } from '@mui/material';
+import { Box, FormControl, InputLabel, Select, Divider, MenuItem, Tooltip, IconButton, Typography } from '@mui/material';
 import { LanguageContext } from '../theme/LanguageSelect';
-import { Close, Check, Edit } from '@mui/icons-material';
+import { Edit } from '@mui/icons-material';
 
-function NameEditor(props: {
-    editingNameValue: string,
-    setEditingNameValue: (value: string) => void,
-    editingNameError: boolean,
-    handleCancelEditPress: () => void,
-    updateGameNameAction: () => void,
-}) {
-    const i18n = React.useContext(LanguageContext);
-    return (
-        <Box display={'flex'} gap={1} width={'100%'}>
-            <TextField
-                id="game-name"
-                label={i18n?.text.GAME_NAME}
-                variant="outlined"
-                value={props.editingNameValue}
-                autoFocus={true}
-                onChange={(e) => { props.setEditingNameValue(e.target.value) }}
-                helperText={props.editingNameError ? i18n?.text.NAME_IN_USE : i18n?.text.ASSIGN_NAME}
-                error={props.editingNameError}
-                onKeyDown={(e) => {
-                    if (e.key === "Enter" || e.key === "Return") {
-                        props.updateGameNameAction();
-                        e.preventDefault();
-                    }
-                    else if (e.key === "Escape") {
-                        props.handleCancelEditPress();
-                        e.preventDefault();
-                    }
-                }}
-                fullWidth
-            />
-            <Tooltip title={i18n?.text.CANCEL}>
-                <IconButton style={{ marginLeft: '1rem' }} aria-label="edit" size={'small'} onClick={props.handleCancelEditPress}>
-                    <Close />
-                </IconButton>
-            </Tooltip>
-            <Tooltip title={i18n?.text.CONFIRM}>
-                <IconButton aria-label="edit" size={'small'} onClick={props.updateGameNameAction}>
-                    <Check />
-                </IconButton>
-            </Tooltip>
-        </Box>)
-}
+import NameEditor from './nameeditor';
 
 export default function GameSelector(props: {
     smallScreen: boolean,
@@ -81,6 +39,8 @@ export default function GameSelector(props: {
                             editingNameError={props.editingNameError}
                             handleCancelEditPress={props.handleCancelEditPress}
                             updateGameNameAction={props.updateGameNameAction}
+                            useHelperText={true}
+                            editFieldId='game-name-edit-small'
                         />
                         :
                         <>
@@ -122,6 +82,8 @@ export default function GameSelector(props: {
                                         editingNameError={props.editingNameError}
                                         handleCancelEditPress={props.handleCancelEditPress}
                                         updateGameNameAction={props.updateGameNameAction}
+                                        useHelperText={true}
+                                        editFieldId='game-name-edit-large'
                                     />
                                     :
                                     <Typography variant="h6" component="div">
