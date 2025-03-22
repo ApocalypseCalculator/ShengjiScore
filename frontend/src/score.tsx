@@ -17,6 +17,7 @@ import { LanguageContext } from './theme/LanguageSelect';
 import Settings from './components/settings';
 import ImportExport from './components/importexport';
 import ActionsMenu from './components/actions';
+import GameSelector from './components/gameselector';
 
 const GLOBAL_GAME_DATA = new GameDataMap();
 
@@ -152,229 +153,163 @@ export default function ScoreCounter(props: { disableCustomTheme?: boolean }) {
                     >
                         {i18n?.text.TITLE}
                     </Typography>
-                    <Box
-                        component="div"
-                        onSubmit={() => { }}
-                        sx={{
-                            display: 'flex',
-                            flexDirection: 'column',
-                            width: '100%',
-                            gap: 2,
+                    <GameSelector
+                        smallScreen={smallScreen}
+                        currentGame={currentGame}
+                        updateCurrentGame={updateCurrentGame}
+                        gameKeys={gameKeys}
+                        editingName={editingName}
+                        setEditingNameValue={setEditingNameValue}
+                        editingNameValue={editingNameValue}
+                        editingNameError={editingNameError}
+                        handleEditNamePress={() => {
+                            setEditingName(true);
+                            setEditingNameValue(currentGame);
                         }}
-                    >
-                        <FormControl fullWidth>
-                            <InputLabel id="game-select-label">{i18n?.text.CUR_GAME}</InputLabel>
-                            <Select
-                                id="game-select"
-                                value={currentGame}
-                                label="Current Game"
-                                onChange={(ev) => updateCurrentGame(ev.target.value)}
-                            >
-                                {
-                                    gameKeys.map((game) => {
-                                        return <MenuItem value={game} key={game}>{game}</MenuItem>
-                                    })
-                                }
-                                <Divider />
-                                <MenuItem value={"New Game"} key={"new_game"}>{i18n?.text.NEW_GAME}</MenuItem>
-                            </Select>
-                        </FormControl>
-                    </Box>
+                        handleCancelEditPress={() => {
+                            setEditingName(false);
+                            setEditingNameError(false);
+                        }}
+                        updateGameNameAction={updateGameNameAction}
+                    />
                     {
                         currentGame === "" ?
                             <></> :
-                            <>
-                                <Divider sx={{ display: smallScreen ? 'none' : null }} />
-                                <Box display={'flex'}>
-                                    {
-                                        editingName ?
-                                            <Box display={'flex'} gap={1} width={'100%'}>
-                                                <TextField
-                                                    id="game-name"
-                                                    label={i18n?.text.GAME_NAME}
-                                                    variant="outlined"
-                                                    value={editingNameValue}
-                                                    onChange={(e) => { setEditingNameValue(e.target.value) }}
-                                                    helperText={editingNameError ? i18n?.text.NAME_IN_USE : i18n?.text.ASSIGN_NAME}
-                                                    error={editingNameError}
-                                                    onKeyDown={(e) => {
-                                                        if (e.key === "Enter" || e.key === "Return") {
-                                                            updateGameNameAction();
-                                                            e.preventDefault();
-                                                        }
-                                                        else if (e.key === "Escape") {
-                                                            setEditingName(false);
-                                                            setEditingNameError(false);
-                                                            e.preventDefault();
-                                                        }
-                                                    }}
-                                                    fullWidth
-                                                >
-                                                </TextField>
-                                                <Tooltip title={i18n?.text.CANCEL}>
-                                                    <IconButton style={{ marginLeft: '1rem' }} aria-label="edit" size={'small'} onClick={() => {
-                                                        setEditingName(false);
-                                                        setEditingNameError(false);
-                                                    }}>
-                                                        <Close />
-                                                    </IconButton>
-                                                </Tooltip>
-                                                <Tooltip title={i18n?.text.CONFIRM}>
-                                                    <IconButton aria-label="edit" size={'small'} onClick={updateGameNameAction}>
-                                                        <Check />
-                                                    </IconButton>
-                                                </Tooltip>
-                                            </Box>
-                                            :
-                                            <Typography variant="h6" component="div">
-                                                {currentGame}
-                                                <Tooltip title={i18n?.text.EDIT_NAME}>
-                                                    <IconButton style={{ marginLeft: '1rem' }} aria-label="edit" size={'small'} onClick={() => {
-                                                        setEditingName(true);
-                                                        setEditingNameValue(currentGame);
-                                                    }}>
-                                                        <Edit />
-                                                    </IconButton>
-                                                </Tooltip>
-                                            </Typography>
-                                    }
-                                </Box>
-                                <PlayerList dense={smallScreen}>
-                                    {
-                                        currentGameData?.players.map((player: Player, i) => {
-                                            return (
-                                                <PlayerListItem
-                                                    key={i}
-                                                    secondaryAction={
-                                                        editingPlayerName != i ?
-                                                            <Box display={'flex'} gap={smallScreen ? 1 : 3}>
-                                                                <Tooltip title={i18n?.text.ADD_LEVEL}>
-                                                                    <IconButton size={smallScreen ? 'small' : 'medium'} edge="end" aria-label="add" onClick={() => {
-                                                                        addScore(i, true);
-                                                                    }}>
-                                                                        <Add />
-                                                                    </IconButton>
-                                                                </Tooltip>
-                                                                <Tooltip title={i18n?.text.SUBTRACT_LEVEL}>
-                                                                    <IconButton size={smallScreen ? 'small' : 'medium'} edge="end" aria-label="remove" onClick={() => {
-                                                                        addScore(i, false);
-                                                                    }}>
-                                                                        <Remove />
-                                                                    </IconButton>
-                                                                </Tooltip>
-                                                                <Tooltip title={i18n?.text.MORE_OPTIONS}>
-                                                                    <IconButton size={smallScreen ? 'small' : 'medium'} edge="end" aria-label="moreoptions" onClick={(ev) => {
-                                                                        handleOpenPlayerMenu(i, ev);
-                                                                    }}>
-                                                                        <MoreVert />
-                                                                    </IconButton>
-                                                                </Tooltip>
-                                                                <Menu
-                                                                    id="basic-menu"
-                                                                    anchorEl={anchorEl}
-                                                                    open={openPlayerMenu === i}
-                                                                    onClose={handleClosePlayerMenu}
-                                                                >
-                                                                    <MenuItem onClick={() => {
-                                                                        setEditingPlayerName(i);
-                                                                        setEditingPlayerNameValue(player.name);
-                                                                        handleClosePlayerMenu();
-                                                                    }}>{i18n?.text.EDIT_NAME}</MenuItem>
-                                                                    <MenuItem onClick={() => {
-                                                                        setCurrentGameData((prev) => {
-                                                                            if (!prev) return prev;
-                                                                            let newstate = { ...prev };
-                                                                            newstate.players.splice(i, 1);
-                                                                            GLOBAL_GAME_DATA.set(currentGame, newstate);
-                                                                            return newstate;
-                                                                        });
-                                                                        handleClosePlayerMenu();
-                                                                    }}>{i18n?.text.DELETE}</MenuItem>
-                                                                </Menu>
-                                                            </Box> : <></>
-                                                    }
-                                                >
-                                                    <ListItemAvatar>
-                                                        <img className='card' src={getCardImgUrl(player, i)}>
-                                                        </img>
-                                                    </ListItemAvatar>
-                                                    <ListItemText
-                                                        sx={{ marginLeft: '1rem' }}
-                                                        primary={
-                                                            editingPlayerName == i ?
-                                                                <Box display={'flex'} gap={1} width={'100%'}>
-                                                                    <TextField
-                                                                        id="player-name"
-                                                                        label={i18n?.text.PLAYER_NAME}
-                                                                        variant="outlined"
-                                                                        value={editingPlayerNameValue}
-                                                                        onChange={(e) => { setEditingPlayerNameValue(e.target.value) }}
-                                                                        fullWidth
-                                                                        onKeyDown={(e) => {
-                                                                            if (e.key === "Enter" || e.key === "Return") {
-                                                                                updatePlayerName(i, editingPlayerNameValue);
-                                                                                setEditingPlayerName(-1);
-                                                                                e.preventDefault();
-                                                                            }
-                                                                            else if (e.key === "Escape") {
-                                                                                setEditingPlayerName(-1);
-                                                                                e.preventDefault();
-                                                                            }
-                                                                        }}
-                                                                    >
-                                                                    </TextField>
-                                                                    <Tooltip title={i18n?.text.CANCEL}>
-                                                                        <IconButton style={{ marginLeft: '1rem' }} aria-label="edit" size={'small'} onClick={() => {
-                                                                            setEditingPlayerName(-1);
-                                                                        }}>
-                                                                            <Close />
-                                                                        </IconButton>
-                                                                    </Tooltip>
-                                                                    <Tooltip title={i18n?.text.CONFIRM}>
-                                                                        <IconButton aria-label="edit" size={'small'} onClick={() => {
+                            <PlayerList dense={smallScreen}>
+                                {
+                                    currentGameData?.players.map((player: Player, i) => {
+                                        return (
+                                            <PlayerListItem
+                                                key={i}
+                                                secondaryAction={
+                                                    editingPlayerName != i ?
+                                                        <Box display={'flex'} gap={smallScreen ? 1 : 3}>
+                                                            <Tooltip title={i18n?.text.ADD_LEVEL}>
+                                                                <IconButton size={smallScreen ? 'small' : 'medium'} edge="end" aria-label="add" onClick={() => {
+                                                                    addScore(i, true);
+                                                                }}>
+                                                                    <Add />
+                                                                </IconButton>
+                                                            </Tooltip>
+                                                            <Tooltip title={i18n?.text.SUBTRACT_LEVEL}>
+                                                                <IconButton size={smallScreen ? 'small' : 'medium'} edge="end" aria-label="remove" onClick={() => {
+                                                                    addScore(i, false);
+                                                                }}>
+                                                                    <Remove />
+                                                                </IconButton>
+                                                            </Tooltip>
+                                                            <Tooltip title={i18n?.text.MORE_OPTIONS}>
+                                                                <IconButton size={smallScreen ? 'small' : 'medium'} edge="end" aria-label="moreoptions" onClick={(ev) => {
+                                                                    handleOpenPlayerMenu(i, ev);
+                                                                }}>
+                                                                    <MoreVert />
+                                                                </IconButton>
+                                                            </Tooltip>
+                                                            <Menu
+                                                                id="basic-menu"
+                                                                anchorEl={anchorEl}
+                                                                open={openPlayerMenu === i}
+                                                                onClose={handleClosePlayerMenu}
+                                                            >
+                                                                <MenuItem onClick={() => {
+                                                                    setEditingPlayerName(i);
+                                                                    setEditingPlayerNameValue(player.name);
+                                                                    handleClosePlayerMenu();
+                                                                }}>{i18n?.text.EDIT_NAME}</MenuItem>
+                                                                <MenuItem onClick={() => {
+                                                                    setCurrentGameData((prev) => {
+                                                                        if (!prev) return prev;
+                                                                        let newstate = { ...prev };
+                                                                        newstate.players.splice(i, 1);
+                                                                        GLOBAL_GAME_DATA.set(currentGame, newstate);
+                                                                        return newstate;
+                                                                    });
+                                                                    handleClosePlayerMenu();
+                                                                }}>{i18n?.text.DELETE}</MenuItem>
+                                                            </Menu>
+                                                        </Box> : <></>
+                                                }
+                                            >
+                                                <ListItemAvatar>
+                                                    <img className='card' src={getCardImgUrl(player, i)}>
+                                                    </img>
+                                                </ListItemAvatar>
+                                                <ListItemText
+                                                    sx={{ marginLeft: '1rem' }}
+                                                    primary={
+                                                        editingPlayerName == i ?
+                                                            <Box display={'flex'} gap={1} width={'100%'}>
+                                                                <TextField
+                                                                    id="player-name"
+                                                                    label={i18n?.text.PLAYER_NAME}
+                                                                    variant="outlined"
+                                                                    value={editingPlayerNameValue}
+                                                                    onChange={(e) => { setEditingPlayerNameValue(e.target.value) }}
+                                                                    fullWidth
+                                                                    onKeyDown={(e) => {
+                                                                        if (e.key === "Enter" || e.key === "Return") {
                                                                             updatePlayerName(i, editingPlayerNameValue);
                                                                             setEditingPlayerName(-1);
-                                                                        }}>
-                                                                            <Check />
-                                                                        </IconButton>
-                                                                    </Tooltip>
-                                                                </Box>
-                                                                :
-                                                                <Badge className={"leader-badge"} badgeContent={i18n?.text.LEAD} color="secondary" invisible={currentWinner !== i}>
-                                                                    <Typography variant="h6" component="div">
-                                                                        {player.name}
-                                                                    </Typography>
-                                                                </Badge>
+                                                                            e.preventDefault();
+                                                                        }
+                                                                        else if (e.key === "Escape") {
+                                                                            setEditingPlayerName(-1);
+                                                                            e.preventDefault();
+                                                                        }
+                                                                    }}
+                                                                >
+                                                                </TextField>
+                                                                <Tooltip title={i18n?.text.CANCEL}>
+                                                                    <IconButton style={{ marginLeft: '1rem' }} aria-label="edit" size={'small'} onClick={() => {
+                                                                        setEditingPlayerName(-1);
+                                                                    }}>
+                                                                        <Close />
+                                                                    </IconButton>
+                                                                </Tooltip>
+                                                                <Tooltip title={i18n?.text.CONFIRM}>
+                                                                    <IconButton aria-label="edit" size={'small'} onClick={() => {
+                                                                        updatePlayerName(i, editingPlayerNameValue);
+                                                                        setEditingPlayerName(-1);
+                                                                    }}>
+                                                                        <Check />
+                                                                    </IconButton>
+                                                                </Tooltip>
+                                                            </Box>
+                                                            :
+                                                            <Badge className={"leader-badge"} badgeContent={i18n?.text.LEAD} color="secondary" invisible={currentWinner !== i}>
+                                                                <Typography variant="h6" component="div">
+                                                                    {player.name}
+                                                                </Typography>
+                                                            </Badge>
 
+                                                    }
+                                                    secondary={<Typography style={{ fontWeight: 'normal' }} variant="body2" component="div">
+                                                        {i18n?.text.ROUND_P1} {player.round}{i18n?.text.ROUND_P2}, {i18n?.text.PLAYING} {getCardStr(player)}
+                                                        {
+                                                            hasPenalty(player) > 0 ? <>
+                                                                <Typography variant="caption" component="span">
+                                                                    -{hasPenalty(player)}
+                                                                </Typography>
+                                                                <div>
+                                                                    <Chip label={i18n?.text.PENALTY} color="error" />
+                                                                </div></> : <></>
                                                         }
-                                                        secondary={<Typography style={{ fontWeight: 'normal' }} variant="body2" component="div">
-                                                            {i18n?.text.ROUND_P1} {player.round}{i18n?.text.ROUND_P2}, {i18n?.text.PLAYING} {getCardStr(player)}
-                                                            {
-                                                                hasPenalty(player) > 0 ? <>
-                                                                    <Typography variant="caption" component="span">
-                                                                        -{hasPenalty(player)}
-                                                                    </Typography>
-                                                                    <div>
-                                                                        <Chip label={i18n?.text.PENALTY} color="error" />
-                                                                    </div></> : <></>
-                                                            }
-                                                            {
-                                                                hasWin(player) > 0 ? <>
-                                                                    <Typography variant="caption" component="span">
-                                                                        +{hasWin(player)}
-                                                                    </Typography>
-                                                                    <div>
-                                                                        <Chip label={i18n?.text.WIN} color="success" />
-                                                                    </div></> : <></>
-                                                            }
-                                                        </Typography>}
-                                                    />
-                                                </PlayerListItem>
-                                            )
-                                        })
-                                    }
-                                </PlayerList>
-                            </>
+                                                        {
+                                                            hasWin(player) > 0 ? <>
+                                                                <Typography variant="caption" component="span">
+                                                                    +{hasWin(player)}
+                                                                </Typography>
+                                                                <div>
+                                                                    <Chip label={i18n?.text.WIN} color="success" />
+                                                                </div></> : <></>
+                                                        }
+                                                    </Typography>}
+                                                />
+                                            </PlayerListItem>
+                                        )
+                                    })
+                                }
+                            </PlayerList>
                     }
                     {smallScreen ? <></> : <Divider />}
                     <BottomBox display={'flex'} flexDirection={'row'} justifyContent={'space-between'}>

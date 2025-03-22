@@ -69,7 +69,7 @@ export const VisuallyHiddenInput = styled('input')({
 export const PlayerList = styled(List)(({ theme }) => ({
     overflow: 'auto',
     [theme.breakpoints.down('md')]: {
-        maxHeight: '72vh', // literally an arbitrary number :clown:
+        maxHeight: '78vh', // literally an arbitrary number :clown:
     },
     [theme.breakpoints.up('md')]: {
         maxHeight: '66vh', // literally an arbitrary number :clown:
