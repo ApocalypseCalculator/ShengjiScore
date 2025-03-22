@@ -118,5 +118,13 @@
     "WIN": {
         "en": "Win",
         "zh": "胜者"
+    },
+    "SETTINGS": {
+        "en": "Settings",
+        "zh": "设置"
+    },
+    "IMPORT_EXPORT": {
+        "en": "Import/Export",
+        "zh": "导入/导出"
     }
 }

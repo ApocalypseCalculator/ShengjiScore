@@ -23,7 +23,7 @@ export default function Settings(props: { smallScreen: boolean }) {
     return (
         props.smallScreen ?
             <>
-                <Tooltip title={i18n?.text.CANCEL}>
+                <Tooltip title={i18n?.text.SETTINGS}>
                     <IconButton sx={{ position: 'fixed', top: '1rem', right: '1rem' }} size={'small'} onClick={() => {
                         setOpenModal(true);
                     }}>

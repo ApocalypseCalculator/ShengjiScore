@@ -11,11 +11,12 @@ export const Card = styled(MuiCard)(({ theme }) => ({
     [theme.breakpoints.down('md')]: {
         padding: theme.spacing(2),
         marginTop: theme.spacing(1),
+        gap: theme.spacing(1.5),
     },
     [theme.breakpoints.up('md')]: {
         padding: theme.spacing(4),
+        gap: theme.spacing(2),
     },
-    gap: theme.spacing(2),
     margin: 'auto',
     [theme.breakpoints.up('sm')]: {
         maxWidth: '800px',
@@ -67,7 +68,12 @@ export const VisuallyHiddenInput = styled('input')({
 
 export const PlayerList = styled(List)(({ theme }) => ({
     overflow: 'auto',
-    maxHeight: '66vh',
+    [theme.breakpoints.down('md')]: {
+        maxHeight: '72vh', // literally an arbitrary number :clown:
+    },
+    [theme.breakpoints.up('md')]: {
+        maxHeight: '66vh', // literally an arbitrary number :clown:
+    },
     paddingLeft: 0,
     paddingRight: 0,
 }));

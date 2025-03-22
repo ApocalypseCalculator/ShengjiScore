@@ -15,6 +15,7 @@ import { getCardImgUrl, getNextScore, getCardStr, hasPenalty, hasWin, getWinning
 import { LanguageContext } from './theme/LanguageSelect';
 
 import Settings from './components/settings';
+import ImportExport from './components/importexport';
 
 const GLOBAL_GAME_DATA = new GameDataMap();
 
@@ -182,7 +183,7 @@ export default function ScoreCounter(props: { disableCustomTheme?: boolean }) {
                         currentGame === "" ?
                             <></> :
                             <>
-                                <Divider />
+                                <Divider sx={{ display: smallScreen ? 'none' : null }} />
                                 <Box display={'flex'}>
                                     {
                                         editingName ?
@@ -398,47 +399,27 @@ export default function ScoreCounter(props: { disableCustomTheme?: boolean }) {
                                 {i18n?.text.DELETE_GAME}
                             </Button >
                         </Box>
-                        <Box display={'flex'} flexDirection={'row'} gap={2}>
-                            <Tooltip title={i18n?.text.IMPORT}>
-                                <IconButton aria-label="import" tabIndex={-1} role={undefined} component={'label'}>
-                                    <FileUpload />
-                                    <VisuallyHiddenInput
-                                        type="file"
-                                        id='upload_data_input'
-                                        accept='application/json'
-                                        onChange={(event) => {
-                                            if (!event.target.files) return;
-                                            if (event.target.files?.length > 0) {
-                                                let file = event.target.files[0];
-                                                const reader = new FileReader();
-                                                reader.onload = (e) => {
-                                                    let contents = e.target?.result;
-                                                    try {
-                                                        let data = JSON.parse(contents as string);
-                                                        GLOBAL_GAME_DATA.import(data);
-                                                        initScoreboard();
-                                                    }
-                                                    catch {
-                                                        setOpenLoadError(true);
-                                                    }
-                                                }
-                                                reader.readAsText(file);
-                                            }
-                                            // clear file input
-                                            // @ts-ignore
-                                            document.getElementById('upload_data_input')!.value = null;
-                                        }}
-                                    />
-                                </IconButton>
-                            </Tooltip>
-                            <Tooltip title={i18n?.text.EXPORT}>
-                                <IconButton aria-label="export" style={currentGame === "" ? { display: 'none' } : {}} onClick={() => {
-                                    GLOBAL_GAME_DATA.export();
-                                }}>
-                                    <FileDownload />
-                                </IconButton>
-                            </Tooltip>
-                        </Box>
+                        <ImportExport smallScreen={smallScreen} onFileChange={(event) => {
+                            if (!event.target.files) return;
+                            if (event.target.files?.length > 0) {
+                                let file = event.target.files[0];
+                                const reader = new FileReader();
+                                reader.onload = (e) => {
+                                    let contents = e.target?.result;
+                                    try {
+                                        let data = JSON.parse(contents as string);
+                                        GLOBAL_GAME_DATA.import(data);
+                                        initScoreboard();
+                                    }
+                                    catch {
+                                        setOpenLoadError(true);
+                                    }
+                                }
+                                reader.readAsText(file);
+                            }
+                        }} onFileExport={() => {
+                            GLOBAL_GAME_DATA.export();
+                        }} showExport={currentGame !== ""} />
                     </BottomBox>
                 </Card>
                 <Dialog
