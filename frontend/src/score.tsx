@@ -1,8 +1,6 @@
 import * as React from 'react';
 import { Card, GameDataContainer, VisuallyHiddenInput, PlayerList, PlayerListItem, BottomBox } from './styled';
 import AppTheme from './theme/AppTheme';
-import ColorModeSelect from './theme/ColorModeSelect';
-import LanguageSelect from './theme/LanguageSelect';
 import { Select, InputLabel, MenuItem, ListItemAvatar, ListItemText, IconButton, Menu, TextField, FormControl, Divider, Chip, CssBaseline, Typography, Box, Button, Dialog, DialogActions, DialogTitle, DialogContent, DialogContentText, Tooltip, Badge } from '@mui/material';
 import { Delete, Remove, Add, Edit, Check, Close, FileUpload, FileDownload, AddBox, MoreVert } from '@mui/icons-material';
 
@@ -15,6 +13,8 @@ import { uniqueNamesGenerator, adjectives, colors, animals } from 'unique-names-
 import { getCardImgUrl, getNextScore, getCardStr, hasPenalty, hasWin, getWinningPlayerIdx } from './utils';
 
 import { LanguageContext } from './theme/LanguageSelect';
+
+import Settings from './components/settings';
 
 const GLOBAL_GAME_DATA = new GameDataMap();
 
@@ -142,10 +142,7 @@ export default function ScoreCounter(props: { disableCustomTheme?: boolean }) {
         <AppTheme {...props}>
             <CssBaseline enableColorScheme />
             <GameDataContainer direction="column" justifyContent="space-between">
-                <Box sx={{ position: 'fixed', top: '1rem', right: '1rem' }} display={'flex'} gap={2}>
-                    <LanguageSelect />
-                    <ColorModeSelect />
-                </Box>
+                <Settings smallScreen={smallScreen} />
                 <Card variant="outlined">
                     <Typography
                         component="h1"

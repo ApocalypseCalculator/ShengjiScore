@@ -10,7 +10,7 @@ export const Card = styled(MuiCard)(({ theme }) => ({
     width: '100%',
     [theme.breakpoints.down('md')]: {
         padding: theme.spacing(2),
-        marginTop: theme.spacing(6),
+        marginTop: theme.spacing(1),
     },
     [theme.breakpoints.up('md')]: {
         padding: theme.spacing(4),
@@ -86,7 +86,7 @@ export const BottomBox = styled(Box)(({ theme }) => ({
         display: 'flex',
         flexDirection: 'row',
         justifyContent: 'space-between',
-        marginBottom: theme.spacing(1),
+        marginBottom: theme.spacing(3),
         width: '91%',
     },
 }));
