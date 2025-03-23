@@ -9,16 +9,17 @@ export default function NameEditor(props: {
     setEditingNameValue: (value: string) => void,
     editingNameError: boolean,
     handleCancelEditPress: () => void,
-    updateGameNameAction: () => void,
+    updateNameAction: () => void,
     useHelperText: boolean
     editFieldId?: string
+    label: string
 }) {
     const i18n = React.useContext(LanguageContext);
     return (
         <Box display={'flex'} gap={1} width={'100%'}>
             <TextField
                 id={props.editFieldId ? props.editFieldId : "name-edit"}
-                label={i18n?.text.GAME_NAME}
+                label={props.label}
                 variant="outlined"
                 value={props.editingNameValue}
                 autoFocus={true}
@@ -27,7 +28,7 @@ export default function NameEditor(props: {
                 error={props.editingNameError && props.useHelperText}
                 onKeyDown={(e) => {
                     if (e.key === "Enter" || e.key === "Return") {
-                        props.updateGameNameAction();
+                        props.updateNameAction();
                         e.preventDefault();
                     }
                     else if (e.key === "Escape") {
@@ -43,7 +44,7 @@ export default function NameEditor(props: {
                 </IconButton>
             </Tooltip>
             <Tooltip title={i18n?.text.CONFIRM}>
-                <IconButton aria-label="edit" size={'small'} onClick={props.updateGameNameAction}>
+                <IconButton aria-label="edit" size={'small'} onClick={props.updateNameAction}>
                     <Check />
                 </IconButton>
             </Tooltip>

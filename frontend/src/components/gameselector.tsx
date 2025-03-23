@@ -38,9 +38,10 @@ export default function GameSelector(props: {
                             setEditingNameValue={props.setEditingNameValue}
                             editingNameError={props.editingNameError}
                             handleCancelEditPress={props.handleCancelEditPress}
-                            updateGameNameAction={props.updateGameNameAction}
+                            updateNameAction={props.updateGameNameAction}
                             useHelperText={true}
                             editFieldId='game-name-edit-small'
+                            label={i18n?.text.GAME_NAME}
                         />
                         :
                         <>
@@ -81,9 +82,10 @@ export default function GameSelector(props: {
                                         setEditingNameValue={props.setEditingNameValue}
                                         editingNameError={props.editingNameError}
                                         handleCancelEditPress={props.handleCancelEditPress}
-                                        updateGameNameAction={props.updateGameNameAction}
+                                        updateNameAction={props.updateGameNameAction}
                                         useHelperText={true}
                                         editFieldId='game-name-edit-large'
+                                        label={i18n?.text.GAME_NAME}
                                     />
                                     :
                                     <Typography variant="h6" component="div">
