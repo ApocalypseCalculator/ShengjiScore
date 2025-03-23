@@ -30,6 +30,8 @@ export default function ScoreCounter(props: { disableCustomTheme?: boolean }) {
     const [editingNameValue, setEditingNameValue] = React.useState("");
     const [editingNameError, setEditingNameError] = React.useState(false);
 
+    const [editingScores, setEditingScores] = React.useState(false);
+
     const [currentWinner, setCurrentWinner] = React.useState(-1);
 
     const [openLoadError, setOpenLoadError] = React.useState(false);
@@ -158,6 +160,10 @@ export default function ScoreCounter(props: { disableCustomTheme?: boolean }) {
                             setEditingNameError(false);
                         }}
                         updateGameNameAction={updateGameNameAction}
+                        editingScores={editingScores}
+                        toggleEditingScores={() => {
+                            setEditingScores((prev) => !prev);
+                        }}
                     />
                     <GamePlayerList
                         smallScreen={smallScreen}
@@ -175,6 +181,7 @@ export default function ScoreCounter(props: { disableCustomTheme?: boolean }) {
                                 return newstate;
                             });
                         }}
+                        editingScores={editingScores}
                     />
                     {smallScreen ? <></> : <Divider />}
                     <BottomBox display={'flex'} flexDirection={'row'} justifyContent={'space-between'}>

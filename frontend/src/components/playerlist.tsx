@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { PlayerList, PlayerListItem } from '../styled';
-import { MenuItem, ListItemAvatar, ListItemText, IconButton, Menu, TextField, Chip, Typography, Box, Tooltip, Badge } from '@mui/material';
-import { Remove, Add, Check, Close, MoreVert } from '@mui/icons-material';
+import { MenuItem, ListItemAvatar, ListItemText, IconButton, Menu, Chip, Typography, Box, Tooltip, Badge } from '@mui/material';
+import { Remove, Add, MoreVert } from '@mui/icons-material';
 
 import { LanguageContext } from '../theme/LanguageSelect';
 import { GameData, Player } from '../data';
@@ -18,6 +18,7 @@ export default function GamePlayerList(props: {
     updatePlayerName: (player: number, name: string) => void;
     deletePlayer: (player: number) => void;
     addScore: (player: number, add: boolean) => void;
+    editingScores: boolean;
 }) {
     const i18n = React.useContext(LanguageContext);
 
@@ -49,27 +50,30 @@ export default function GamePlayerList(props: {
                             secondaryAction={
                                 editingPlayerName != i ?
                                     <Box display={'flex'} gap={props.smallScreen ? 1 : 3}>
-                                        <Tooltip title={i18n?.text.ADD_LEVEL}>
-                                            <IconButton size={props.smallScreen ? 'small' : 'medium'} edge="end" aria-label="add" onClick={() => {
-                                                props.addScore(i, true);
-                                            }}>
-                                                <Add />
-                                            </IconButton>
-                                        </Tooltip>
-                                        <Tooltip title={i18n?.text.SUBTRACT_LEVEL}>
-                                            <IconButton size={props.smallScreen ? 'small' : 'medium'} edge="end" aria-label="remove" onClick={() => {
-                                                props.addScore(i, false);
-                                            }}>
-                                                <Remove />
-                                            </IconButton>
-                                        </Tooltip>
-                                        <Tooltip title={i18n?.text.MORE_OPTIONS}>
-                                            <IconButton size={props.smallScreen ? 'small' : 'medium'} edge="end" aria-label="moreoptions" onClick={(ev) => {
-                                                handleOpenPlayerMenu(i, ev);
-                                            }}>
-                                                <MoreVert />
-                                            </IconButton>
-                                        </Tooltip>
+                                        {
+                                            props.editingScores ? <>
+                                                <Tooltip title={i18n?.text.ADD_LEVEL}>
+                                                    <IconButton size={props.smallScreen ? 'small' : 'medium'} edge="end" aria-label="add" onClick={() => {
+                                                        props.addScore(i, true);
+                                                    }}>
+                                                        <Add />
+                                                    </IconButton>
+                                                </Tooltip>
+                                                <Tooltip title={i18n?.text.SUBTRACT_LEVEL}>
+                                                    <IconButton size={props.smallScreen ? 'small' : 'medium'} edge="end" aria-label="remove" onClick={() => {
+                                                        props.addScore(i, false);
+                                                    }}>
+                                                        <Remove />
+                                                    </IconButton>
+                                                </Tooltip>
+                                            </> : <Tooltip title={i18n?.text.MORE_OPTIONS}>
+                                                <IconButton size={props.smallScreen ? 'small' : 'medium'} edge="end" aria-label="moreoptions" onClick={(ev) => {
+                                                    handleOpenPlayerMenu(i, ev);
+                                                }}>
+                                                    <MoreVert />
+                                                </IconButton>
+                                            </Tooltip>
+                                        }
                                         <Menu
                                             id="basic-menu"
                                             anchorEl={anchorEl}

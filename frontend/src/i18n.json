@@ -130,5 +130,13 @@
     "ACTIONS": {
         "en": "Actions",
         "zh": "更多选项"
+    },
+    "EDIT_SCORES": {
+        "en": "Edit Scores",
+        "zh": "编辑分数"
+    },
+    "FINISH_EDIT_SCORES": {
+        "en": "Submit Scores",
+        "zh": "提交分数"
     }
 }

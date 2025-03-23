@@ -1,7 +1,7 @@
 import Stack from '@mui/material/Stack';
 import MuiCard from '@mui/material/Card';
 import { styled } from '@mui/material/styles';
-import { Box, List, ListItem } from '@mui/material';
+import { Box, List, ListItem, Button } from '@mui/material';
 
 export const Card = styled(MuiCard)(({ theme }) => ({
     display: 'flex',
@@ -94,5 +94,19 @@ export const BottomBox = styled(Box)(({ theme }) => ({
         justifyContent: 'space-between',
         marginBottom: theme.spacing(3),
         width: '91%',
+    },
+}));
+
+export const AbsoluteButton = styled(Button)(({ theme }) => ({
+    [theme.breakpoints.down('md')]: { // pov: backend dev does CSS
+        position: 'absolute',
+        bottom: 0,
+        left: '40%',
+        marginBottom: theme.spacing(3),
+        zIndex: 1
+    },
+    [theme.breakpoints.up('md')]: {
+        marginLeft: 'auto',
+        minWidth: 'fit-content'
     },
 }));

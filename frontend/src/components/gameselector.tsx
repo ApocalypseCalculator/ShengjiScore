@@ -2,9 +2,21 @@ import * as React from 'react';
 
 import { Box, FormControl, InputLabel, Select, Divider, MenuItem, Tooltip, IconButton, Typography } from '@mui/material';
 import { LanguageContext } from '../theme/LanguageSelect';
-import { Edit } from '@mui/icons-material';
+import { Edit, Lock, LockOpen } from '@mui/icons-material';
+
+import { AbsoluteButton } from '../styled';
 
 import NameEditor from './nameeditor';
+
+function EditScoresToggle(props: {
+    editingScores: boolean,
+    toggleEditingScores: () => void,
+}) {
+    const i18n = React.useContext(LanguageContext);
+    return <AbsoluteButton variant={props.editingScores ? "contained" : "outlined"} color="secondary" aria-label="edit-scores" startIcon={props.editingScores ? <LockOpen /> : <Lock />} onClick={props.toggleEditingScores}>
+        {props.editingScores ? i18n?.text.FINISH_EDIT_SCORES : i18n?.text.EDIT_SCORES}
+    </AbsoluteButton >
+}
 
 export default function GameSelector(props: {
     smallScreen: boolean,
@@ -18,6 +30,8 @@ export default function GameSelector(props: {
     handleEditNamePress: () => void,
     handleCancelEditPress: () => void,
     updateGameNameAction: () => void,
+    editingScores: boolean,
+    toggleEditingScores: () => void,
 }) {
     const i18n = React.useContext(LanguageContext);
     return (
@@ -71,7 +85,7 @@ export default function GameSelector(props: {
                 }
             </Box>
             {
-                props.smallScreen ? null :
+                props.smallScreen ? <EditScoresToggle editingScores={props.editingScores} toggleEditingScores={props.toggleEditingScores} /> :
                     <>
                         <Divider />
                         <Box display={'flex'}>
@@ -88,13 +102,14 @@ export default function GameSelector(props: {
                                         label={i18n?.text.GAME_NAME}
                                     />
                                     :
-                                    <Typography variant="h6" component="div">
+                                    <Typography variant="h6" component="div" sx={{ display: 'flex', alignItems: 'center', width: '100%' }}>
                                         {props.currentGame}
                                         <Tooltip title={i18n?.text.EDIT_NAME}>
-                                            <IconButton style={{ marginLeft: '1rem' }} aria-label="edit" size={'small'} onClick={props.handleEditNamePress}>
+                                            <IconButton style={{ marginLeft: '1rem', marginRight: '1rem' }} aria-label="edit" size={'small'} onClick={props.handleEditNamePress}>
                                                 <Edit />
                                             </IconButton>
                                         </Tooltip>
+                                        <EditScoresToggle editingScores={props.editingScores} toggleEditingScores={props.toggleEditingScores} />
                                     </Typography>
                             }
                         </Box>
