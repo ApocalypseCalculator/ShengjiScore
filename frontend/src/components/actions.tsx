@@ -1,7 +1,7 @@
 import * as React from 'react';
 
 import { Box, Button, Menu, MenuItem, ListItemIcon, ListItemText, Divider } from '@mui/material';
-import { AddBox, Delete, MoreHoriz } from '@mui/icons-material';
+import { AddBox, Delete, MoreHoriz, History } from '@mui/icons-material';
 import { LanguageContext } from '../theme/LanguageSelect';
 
 export default function ActionsMenu(props: {
@@ -9,6 +9,7 @@ export default function ActionsMenu(props: {
     showMenu: boolean,
     onAdd: () => void,
     onDelete: () => void,
+    editingScores: boolean,
 }) {
     const i18n = React.useContext(LanguageContext);
 
@@ -25,7 +26,7 @@ export default function ActionsMenu(props: {
     return (
         props.smallScreen ?
             <Box display={'flex'} flexDirection={'row'}>
-                <Button variant="outlined" aria-label="more-actions" component={'label'} startIcon={<MoreHoriz />} style={!props.showMenu ? { display: 'none' } : {}} onClick={(ev) => {
+                <Button disabled={props.editingScores} variant="outlined" aria-label="more-actions" component={'label'} startIcon={<MoreHoriz />} style={!props.showMenu ? { display: 'none' } : {}} onClick={(ev) => {
                     handleOpenActionsMenu(ev);
                 }}>
                     {i18n?.text.ACTIONS}
@@ -53,6 +54,14 @@ export default function ActionsMenu(props: {
                         </ListItemIcon>
                         <ListItemText>{i18n?.text.ADD_PLAYER}</ListItemText>
                     </MenuItem>
+                    <MenuItem onClick={() => {
+                        console.log('aaa')
+                    }}>
+                        <ListItemIcon>
+                            <History fontSize="small" />
+                        </ListItemIcon>
+                        <ListItemText>{i18n?.text.HISTORY}</ListItemText>
+                    </MenuItem>
                     <Divider />
                     <MenuItem onClick={() => {
                         handleCloseActionsMenu();
@@ -66,10 +75,15 @@ export default function ActionsMenu(props: {
                 </Menu>
             </Box> :
             <Box display={'flex'} flexDirection={'row'} gap={2}>
-                <Button variant="outlined" aria-label="add-player" startIcon={<AddBox />} style={!props.showMenu ? { display: 'none' } : {}} onClick={props.onAdd}>
+                <Button disabled={props.editingScores} variant="outlined" aria-label="add-player" startIcon={<AddBox />} style={!props.showMenu ? { display: 'none' } : {}} onClick={props.onAdd}>
                     {i18n?.text.ADD_PLAYER}
                 </Button >
-                <Button variant="outlined" aria-label="add-player" startIcon={<Delete />} style={!props.showMenu ? { display: 'none' } : {}} onClick={props.onDelete}>
+                <Button disabled={props.editingScores} variant="outlined" aria-label="show-history" startIcon={<History />} style={!props.showMenu ? { display: 'none' } : {}} onClick={() => {
+                    console.log('e')
+                }}>
+                    {i18n?.text.HISTORY}
+                </Button >
+                <Button disabled={props.editingScores} variant="outlined" aria-label="delete-game" startIcon={<Delete />} style={!props.showMenu ? { display: 'none' } : {}} onClick={props.onDelete}>
                     {i18n?.text.DELETE_GAME}
                 </Button >
             </Box>

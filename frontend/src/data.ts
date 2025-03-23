@@ -75,7 +75,8 @@ export function initGameData() {
     let gamedata: GameData;
     gamedata = {
         description: '',
-        players: []
+        players: [],
+        rounds: []
     }
     gamedata.players = Array.from(Array(4)).map(() => {
         return createPlayer();
@@ -83,15 +84,16 @@ export function initGameData() {
     return gamedata;
 }
 
-export function createPlayer() {
+export function createPlayer(): Player {
     return {
+        id: Date.now(), // basically unique
         name: uniqueNamesGenerator({
             dictionaries: [starWars],
             separator: ' '
         }),
         score: 2,
-        round: 1
-    } as Player;
+        round: 1,
+    };
 }
 
 type RawGameData = {
@@ -100,12 +102,37 @@ type RawGameData = {
 }
 
 export type GameData = {
+    // game description (currently unused)
     description: string;
+    // list of players
     players: Player[];
+    // list of rounds
+    rounds: Round[];
 }
 
 export type Player = {
+    // player id
+    id: number;
+    // player name
     name: string;
+    // current score
     score: number;
+    // current round
     round: number;
+}
+
+export type Round = {
+    // time of round in Date.now() format
+    time: number;
+    // changes in score in this round
+    changes: RoundChange[];
+}
+
+type RoundChange = {
+    // player id in players array
+    id: number;
+    // score change
+    schange: number;
+    // round change
+    rchange: number;
 }

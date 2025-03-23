@@ -65,6 +65,7 @@ export default function GameSelector(props: {
                                     id="game-select"
                                     value={props.currentGame}
                                     label="Current Game"
+                                    disabled={props.editingScores}
                                     onChange={(ev) => props.updateCurrentGame(ev.target.value)}
                                 >
                                     {
@@ -76,8 +77,8 @@ export default function GameSelector(props: {
                                     <MenuItem value={"New Game"} key={"new_game"}>{i18n?.text.NEW_GAME}</MenuItem>
                                 </Select>
                             </FormControl>
-                            <Tooltip sx={{ display: props.smallScreen ? null : 'none' }} title={i18n?.text.EDIT_NAME}>
-                                <IconButton style={{ marginLeft: '1rem' }} aria-label="edit" size={'small'} onClick={props.handleEditNamePress}>
+                            <Tooltip sx={{ display: (props.smallScreen && props.currentGame !== "") ? null : 'none' }} title={i18n?.text.EDIT_NAME}>
+                                <IconButton disabled={props.editingScores} style={{ marginLeft: '1rem' }} aria-label="edit" size={'small'} onClick={props.handleEditNamePress}>
                                     <Edit />
                                 </IconButton>
                             </Tooltip>
@@ -85,7 +86,7 @@ export default function GameSelector(props: {
                 }
             </Box>
             {
-                props.smallScreen ? <EditScoresToggle editingScores={props.editingScores} toggleEditingScores={props.toggleEditingScores} /> :
+                props.currentGame === "" ? <></> : (props.smallScreen ? <EditScoresToggle editingScores={props.editingScores} toggleEditingScores={props.toggleEditingScores} /> :
                     <>
                         <Divider />
                         <Box display={'flex'}>
@@ -105,7 +106,7 @@ export default function GameSelector(props: {
                                     <Typography variant="h6" component="div" sx={{ display: 'flex', alignItems: 'center', width: '100%' }}>
                                         {props.currentGame}
                                         <Tooltip title={i18n?.text.EDIT_NAME}>
-                                            <IconButton style={{ marginLeft: '1rem', marginRight: '1rem' }} aria-label="edit" size={'small'} onClick={props.handleEditNamePress}>
+                                            <IconButton disabled={props.editingScores} style={{ marginLeft: '1rem', marginRight: '1rem' }} aria-label="edit" size={'small'} onClick={props.handleEditNamePress}>
                                                 <Edit />
                                             </IconButton>
                                         </Tooltip>
@@ -113,7 +114,7 @@ export default function GameSelector(props: {
                                     </Typography>
                             }
                         </Box>
-                    </>
+                    </>)
             }
         </>
     );

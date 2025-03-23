@@ -52,7 +52,7 @@ export default function GamePlayerList(props: {
                                     <Box display={'flex'} gap={props.smallScreen ? 1 : 3}>
                                         {
                                             props.editingScores ? <>
-                                                <Tooltip title={i18n?.text.ADD_LEVEL}>
+                                                <Tooltip sx={{opacity: 1}} title={i18n?.text.ADD_LEVEL}>
                                                     <IconButton size={props.smallScreen ? 'small' : 'medium'} edge="end" aria-label="add" onClick={() => {
                                                         props.addScore(i, true);
                                                     }}>

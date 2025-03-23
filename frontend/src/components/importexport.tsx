@@ -9,6 +9,7 @@ export default function ImportExport(props: {
     onFileChange: (ev: React.ChangeEvent<HTMLInputElement>) => void;
     onFileExport: () => void;
     showExport: boolean;
+    editingScores: boolean;
 }) {
     const i18n = React.useContext(LanguageContext);
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
@@ -25,7 +26,7 @@ export default function ImportExport(props: {
         props.smallScreen ?
             <Box display={'flex'} flexDirection={'row'}>
                 <Tooltip title={i18n?.text.IMPORT_EXPORT}>
-                    <IconButton onClick={(ev) => {
+                    <IconButton disabled={props.editingScores} onClick={(ev) => {
                         handleOpenImportExportMenu(ev);
                     }} aria-label="import" tabIndex={-1} role={undefined} component={'label'}>
                         <ImportExportIcon />
@@ -63,7 +64,7 @@ export default function ImportExport(props: {
             </Box> :
             <Box display={'flex'} flexDirection={'row'} gap={2}>
                 <Tooltip title={i18n?.text.IMPORT}>
-                    <IconButton aria-label="import" tabIndex={-1} role={undefined} component={'label'}>
+                    <IconButton disabled={props.editingScores} aria-label="import" tabIndex={-1} role={undefined} component={'label'}>
                         <FileUpload />
                         <VisuallyHiddenInput
                             type="file"
@@ -79,7 +80,7 @@ export default function ImportExport(props: {
                     </IconButton>
                 </Tooltip>
                 <Tooltip title={i18n?.text.EXPORT}>
-                    <IconButton aria-label="export" style={!props.showExport ? { display: 'none' } : {}} onClick={props.onFileExport}>
+                    <IconButton disabled={props.editingScores} aria-label="export" style={!props.showExport ? { display: 'none' } : {}} onClick={props.onFileExport}>
                         <FileDownload />
                     </IconButton>
                 </Tooltip>

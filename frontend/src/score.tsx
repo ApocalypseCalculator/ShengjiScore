@@ -6,7 +6,7 @@ import { Divider, CssBaseline, Typography, Button, Dialog, DialogActions, Dialog
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { useTheme } from '@mui/material/styles';
 
-import { GameDataMap, GameData, initGameData, createPlayer } from './data';
+import { GameDataMap, GameData, initGameData, createPlayer, Round } from './data';
 
 import { uniqueNamesGenerator, adjectives, colors, animals } from 'unique-names-generator';
 import { getNextScore, getWinningPlayerIdx } from './utils';
@@ -31,6 +31,7 @@ export default function ScoreCounter(props: { disableCustomTheme?: boolean }) {
     const [editingNameError, setEditingNameError] = React.useState(false);
 
     const [editingScores, setEditingScores] = React.useState(false);
+    const [editedScoreGameData, setEditedScoreGameData] = React.useState<GameData>();
 
     const [currentWinner, setCurrentWinner] = React.useState(-1);
 
@@ -54,13 +55,16 @@ export default function ScoreCounter(props: { disableCustomTheme?: boolean }) {
     }, []);
 
     React.useEffect(() => {
-        if (currentGameData) {
+        if (currentGameData && !editingScores) {
             setCurrentWinner(getWinningPlayerIdx(currentGameData.players));
+        }
+        else if(editedScoreGameData && editingScores) {
+            setCurrentWinner(getWinningPlayerIdx(editedScoreGameData.players));
         }
         else {
             setCurrentWinner(-1);
         }
-    }, [currentGameData]);
+    }, [currentGameData, editingScores, editedScoreGameData]);
 
     function updateCurrentGame(game: string) {
         if (game === "New Game") {
@@ -111,13 +115,50 @@ export default function ScoreCounter(props: { disableCustomTheme?: boolean }) {
     }
 
     function addScore(idx: number, add: boolean) {
-        setCurrentGameData((prev) => {
+        setEditedScoreGameData((prev) => {
             if (!prev) return prev;
             let newstate = { ...prev };
             newstate.players[idx] = getNextScore(newstate.players[idx], add);
-            GLOBAL_GAME_DATA.set(currentGame, newstate);
             return newstate;
         });
+    }
+
+    function submitScoreChanges() {
+        if (editedScoreGameData) {
+            setCurrentGameData((previousGameData) => {
+                // find differences between current and edited score
+                // we make the guarantee that no changes other than player scores
+                // were made to the game data
+                if (!previousGameData) { // should not be a possible case
+                    return previousGameData;
+                }
+                let newround: Round = { time: Date.now(), changes: [] };
+                previousGameData.players.forEach((player, idx) => {
+                    if(player.id !== editedScoreGameData.players[idx].id) {
+                        // horror!
+                        console.error('Encountered impossible state: player id mismatch');
+                    }
+                    if (player.score !== editedScoreGameData.players[idx].score || player.round !== editedScoreGameData.players[idx].round) {
+                        newround.changes.push(
+                            {
+                                id: player.id,
+                                schange: editedScoreGameData.players[idx].score - player.score,
+                                rchange: editedScoreGameData.players[idx].round - player.round
+                            }
+                        );
+                    }
+                })
+                if(newround.changes.length > 0) {
+                    editedScoreGameData.rounds.push(newround);
+                }
+                else {
+                    return previousGameData;
+                }
+                console.log('Game score update', editedScoreGameData)
+                GLOBAL_GAME_DATA.set(currentGame, editedScoreGameData);
+                return editedScoreGameData
+            });
+        }
     }
 
     function updateGameNameAction() {
@@ -162,13 +203,22 @@ export default function ScoreCounter(props: { disableCustomTheme?: boolean }) {
                         updateGameNameAction={updateGameNameAction}
                         editingScores={editingScores}
                         toggleEditingScores={() => {
-                            setEditingScores((prev) => !prev);
+                            setEditingScores((prev) => {
+                                if (!prev) {
+                                    // create deep copy of object
+                                    setEditedScoreGameData(window.structuredClone(currentGameData))
+                                }
+                                else {
+                                    submitScoreChanges()
+                                }
+                                return !prev
+                            });
                         }}
                     />
                     <GamePlayerList
                         smallScreen={smallScreen}
                         showList={currentGame !== ""}
-                        currentGameData={currentGameData}
+                        currentGameData={editingScores ? editedScoreGameData : currentGameData}
                         currentWinner={currentWinner}
                         updatePlayerName={updatePlayerName}
                         addScore={addScore}
@@ -204,8 +254,9 @@ export default function ScoreCounter(props: { disableCustomTheme?: boolean }) {
                                 setCurrentGame("");
                                 initScoreboard();
                             }}
+                            editingScores={editingScores}
                         />
-                        <ImportExport smallScreen={smallScreen} onFileChange={(event) => {
+                        <ImportExport editingScores={editingScores} smallScreen={smallScreen} onFileChange={(event) => {
                             if (!event.target.files) return;
                             if (event.target.files?.length > 0) {
                                 let file = event.target.files[0];
