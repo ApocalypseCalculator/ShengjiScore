@@ -142,5 +142,25 @@
     "HISTORY": {
         "en": "Round History",
         "zh": "历史记录"
+    },
+    "HISTORY_ROUND": {
+        "en": "Game",
+        "zh": "第"
+    },
+    "HISTORY_ROUND_P2": {
+        "en": "",
+        "zh": " 盘"
+    },
+    "DELETED_PLAYER": {
+        "en": "Deleted Player",
+        "zh": "玩家已删除"
+    },
+    "ROUND_CHANGE": {
+        "en": "round",
+        "zh": "轮数"
+    },
+    "SCORE_CHANGE": {
+        "en": "score",
+        "zh": "分数"
     }
 }

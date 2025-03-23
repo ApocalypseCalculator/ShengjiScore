@@ -86,7 +86,7 @@ export function initGameData() {
 
 export function createPlayer(): Player {
     return {
-        id: Date.now(), // basically unique
+        id: Math.round(Date.now() * Math.random()), // basically unique
         name: uniqueNamesGenerator({
             dictionaries: [starWars],
             separator: ' '
@@ -128,7 +128,7 @@ export type Round = {
     changes: RoundChange[];
 }
 
-type RoundChange = {
+export type RoundChange = {
     // player id in players array
     id: number;
     // score change

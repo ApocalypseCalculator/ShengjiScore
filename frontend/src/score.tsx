@@ -18,6 +18,7 @@ import ImportExport from './components/importexport';
 import ActionsMenu from './components/actions';
 import GameSelector from './components/gameselector';
 import GamePlayerList from './components/playerlist';
+import History from './components/history';
 
 const GLOBAL_GAME_DATA = new GameDataMap();
 
@@ -32,6 +33,7 @@ export default function ScoreCounter(props: { disableCustomTheme?: boolean }) {
 
     const [editingScores, setEditingScores] = React.useState(false);
     const [editedScoreGameData, setEditedScoreGameData] = React.useState<GameData>();
+    const [openHistoryModal, setOpenHistoryModal] = React.useState(false);
 
     const [currentWinner, setCurrentWinner] = React.useState(-1);
 
@@ -58,7 +60,7 @@ export default function ScoreCounter(props: { disableCustomTheme?: boolean }) {
         if (currentGameData && !editingScores) {
             setCurrentWinner(getWinningPlayerIdx(currentGameData.players));
         }
-        else if(editedScoreGameData && editingScores) {
+        else if (editedScoreGameData && editingScores) {
             setCurrentWinner(getWinningPlayerIdx(editedScoreGameData.players));
         }
         else {
@@ -134,7 +136,7 @@ export default function ScoreCounter(props: { disableCustomTheme?: boolean }) {
                 }
                 let newround: Round = { time: Date.now(), changes: [] };
                 previousGameData.players.forEach((player, idx) => {
-                    if(player.id !== editedScoreGameData.players[idx].id) {
+                    if (player.id !== editedScoreGameData.players[idx].id) {
                         // horror!
                         console.error('Encountered impossible state: player id mismatch');
                     }
@@ -148,7 +150,7 @@ export default function ScoreCounter(props: { disableCustomTheme?: boolean }) {
                         );
                     }
                 })
-                if(newround.changes.length > 0) {
+                if (newround.changes.length > 0) {
                     editedScoreGameData.rounds.push(newround);
                 }
                 else {
@@ -255,6 +257,7 @@ export default function ScoreCounter(props: { disableCustomTheme?: boolean }) {
                                 initScoreboard();
                             }}
                             editingScores={editingScores}
+                            setOpenHistoryModal={setOpenHistoryModal}
                         />
                         <ImportExport editingScores={editingScores} smallScreen={smallScreen} onFileChange={(event) => {
                             if (!event.target.files) return;
@@ -301,6 +304,9 @@ export default function ScoreCounter(props: { disableCustomTheme?: boolean }) {
                         </Button>
                     </DialogActions>
                 </Dialog>
+                <History openHistoryModal={openHistoryModal}
+                    setOpenHistoryModal={setOpenHistoryModal}
+                    gameData={currentGameData} />
             </GameDataContainer>
         </AppTheme>
     );

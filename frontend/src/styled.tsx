@@ -107,6 +107,6 @@ export const AbsoluteButton = styled(Button)(({ theme }) => ({
     },
     [theme.breakpoints.up('md')]: {
         marginLeft: 'auto',
-        minWidth: 'fit-content'
+        minWidth: 'fit-content',
     },
 }));

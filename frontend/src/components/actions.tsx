@@ -10,6 +10,7 @@ export default function ActionsMenu(props: {
     onAdd: () => void,
     onDelete: () => void,
     editingScores: boolean,
+    setOpenHistoryModal: (value: boolean) => void,
 }) {
     const i18n = React.useContext(LanguageContext);
 
@@ -55,7 +56,8 @@ export default function ActionsMenu(props: {
                         <ListItemText>{i18n?.text.ADD_PLAYER}</ListItemText>
                     </MenuItem>
                     <MenuItem onClick={() => {
-                        console.log('aaa')
+                        handleCloseActionsMenu();
+                        props.setOpenHistoryModal(true);
                     }}>
                         <ListItemIcon>
                             <History fontSize="small" />
@@ -79,7 +81,7 @@ export default function ActionsMenu(props: {
                     {i18n?.text.ADD_PLAYER}
                 </Button >
                 <Button disabled={props.editingScores} variant="outlined" aria-label="show-history" startIcon={<History />} style={!props.showMenu ? { display: 'none' } : {}} onClick={() => {
-                    console.log('e')
+                    props.setOpenHistoryModal(true);
                 }}>
                     {i18n?.text.HISTORY}
                 </Button >
