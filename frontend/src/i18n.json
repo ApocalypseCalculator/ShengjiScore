@@ -174,5 +174,21 @@
     "NO_ROUNDS": {
         "en": "History is empty",
         "zh": "尚未进行任何回合"
+    },
+    "HELP": {
+        "en": "About",
+        "zh": "关于"
+    },
+    "SOURCE_CODE": {
+        "en": "Source Code",
+        "zh": "代码库"
+    },
+    "MADE_BY": {
+        "en": "Made by Patrick Lin",
+        "zh": "作者: Patrick Lin"
+    },
+    "HOW_TO_PLAY_SUMMARY": {
+        "en": "How to Play Shengji",
+        "zh": "如何玩升级"
     }
 }
