@@ -303,7 +303,9 @@ export default function ScoreCounter(props: { disableCustomTheme?: boolean }) {
                 </Card>
                 <Dialog
                     open={openLoadError}
-                    onClose={() => { }}
+                    onClose={() => {
+                        setOpenLoadError(false);
+                    }}
                     aria-labelledby="alert-dialog-title"
                     aria-describedby="alert-dialog-description"
                 >
