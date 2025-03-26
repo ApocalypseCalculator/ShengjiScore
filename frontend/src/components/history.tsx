@@ -1,7 +1,8 @@
 import * as React from 'react';
 import { LanguageContext } from "../theme/LanguageSelect";
-import { Modal, Box, Typography, ListItem, List, ListItemText } from '@mui/material';
-import { GameData, RoundChange } from '../data';
+import { Modal, Box, Typography, ListItem, List, ListItemText, Tooltip, IconButton } from '@mui/material';
+import { Undo } from '@mui/icons-material';
+import { GameData, Round, RoundChange } from '../data';
 
 const style = {
     position: 'absolute',
@@ -20,7 +21,8 @@ const style = {
 export default function History(props: {
     openHistoryModal: boolean,
     setOpenHistoryModal: (value: boolean) => void,
-    gameData: GameData | undefined
+    gameData: GameData | undefined,
+    undoRound: (r: Round) => void
 }) {
     const i18n = React.useContext(LanguageContext);
     function getPlayerName(id: number) {
@@ -58,29 +60,33 @@ export default function History(props: {
                 <Typography id="modal-modal-title" variant="h6" component="h2">
                     {i18n?.text.HISTORY}
                 </Typography>
-                <List>
-                    {
-                        props.gameData.rounds.reverse().map((round, idx) => {
-                            return <ListItem key={round.time} secondaryAction={
-                                idx == 0 ? (
-                                    /*
-                                    TODO: implement undo
-                                    <Typography variant="body2">{'undo'}</Typography>
-                                    */
-                                    <></>
-                                ) : <></>
-                            } disableGutters>
-                                <ListItemText
-                                    sx={{ whiteSpace: 'pre-line' }}
-                                    primary={`${i18n?.text.HISTORY_ROUND} ${props.gameData!.rounds.length - idx}${i18n?.text.HISTORY_ROUND_P2}, ${new Date(round.time).toLocaleString()}`}
-                                    secondary={round.changes.map((change) => {
-                                        return getScoreChange(change);
-                                    }).join('\n')}
-                                />
-                            </ListItem>
-                        })
-                    }
-                </List>
+                {
+                    props.gameData.rounds.length == 0 ? <Typography>{i18n?.text.NO_ROUNDS}</Typography> : <List>
+                        {
+                            props.gameData.rounds.reverse().map((round, idx) => {
+                                return <ListItem key={round.time} secondaryAction={
+                                    idx == 0 ? (
+                                        <Tooltip sx={{ opacity: 1 }} title={i18n?.text.UNDO}>
+                                            <IconButton size={'small'} edge="end" aria-label="add" onClick={() => {
+                                                props.undoRound(round);
+                                            }}>
+                                                <Undo />
+                                            </IconButton>
+                                        </Tooltip>
+                                    ) : <></>
+                                } disableGutters>
+                                    <ListItemText
+                                        sx={{ whiteSpace: 'pre-line' }}
+                                        primary={`${i18n?.text.HISTORY_ROUND} ${props.gameData!.rounds.length - idx}${i18n?.text.HISTORY_ROUND_P2}, ${new Date(round.time).toLocaleString()}`}
+                                        secondary={round.changes.map((change) => {
+                                            return getScoreChange(change);
+                                        }).join('\n')}
+                                    />
+                                </ListItem>
+                            })
+                        }
+                    </List>
+                }
             </Box>
         </Modal>
     );

@@ -116,6 +116,25 @@ export default function ScoreCounter(props: { disableCustomTheme?: boolean }) {
         });
     }
 
+    function undoGameRound(round: Round) {
+        setCurrentGameData((prev) => {
+            if (!prev) return prev;
+            let newstate = { ...prev };
+            round.changes.forEach((change) => {
+                let player = newstate.players.find((p) => p.id === change.id);
+                if (!player) {
+                    console.error('Player not found in undoGameRound');
+                    return;
+                }
+                player.score -= change.schange;
+                player.round -= change.rchange;
+            });
+            newstate.rounds = newstate.rounds.filter((r) => r.time !== round.time);
+            GLOBAL_GAME_DATA.set(currentGame, newstate);
+            return newstate;
+        });
+    }
+
     function addScore(idx: number, add: boolean) {
         setEditedScoreGameData((prev) => {
             if (!prev) return prev;
@@ -306,7 +325,8 @@ export default function ScoreCounter(props: { disableCustomTheme?: boolean }) {
                 </Dialog>
                 <History openHistoryModal={openHistoryModal}
                     setOpenHistoryModal={setOpenHistoryModal}
-                    gameData={currentGameData} />
+                    gameData={currentGameData}
+                    undoRound={undoGameRound} />
             </GameDataContainer>
         </AppTheme>
     );

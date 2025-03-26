@@ -162,5 +162,13 @@
     "SCORE_CHANGE": {
         "en": "score",
         "zh": "分数"
+    },
+    "UNDO": {
+        "en": "Undo",
+        "zh": "撤销"
+    },
+    "NO_ROUNDS": {
+        "en": "History is empty",
+        "zh": "尚未进行任何回合"
     }
 }
