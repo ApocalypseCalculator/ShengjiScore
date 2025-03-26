@@ -110,3 +110,17 @@ export const AbsoluteButton = styled(Button)(({ theme }) => ({
         minWidth: 'fit-content',
     },
 }));
+
+export const PlayingCard = styled('img')(({ theme }) => ({
+    [theme.breakpoints.down('md')]: { 
+        width: 60,
+    },
+    [theme.breakpoints.up('md')]: {
+        width: 70,
+    },
+    border: 0,
+    verticalAlign: 'initial',
+    boxSizing: 'initial',
+    margin: 0,
+    padding: 0
+}));

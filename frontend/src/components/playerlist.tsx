@@ -8,6 +8,7 @@ import { GameData, Player } from '../data';
 
 import { getCardImgUrl, getCardStr, hasPenalty, hasWin } from '../utils';
 
+import { PlayingCard } from '../styled';
 import NameEditor from './nameeditor';
 
 export default function GamePlayerList(props: {
@@ -94,8 +95,7 @@ export default function GamePlayerList(props: {
                             }
                         >
                             <ListItemAvatar>
-                                <img className='card' src={getCardImgUrl(player, i)}>
-                                </img>
+                                <PlayingCard src={getCardImgUrl(player, i)} />
                             </ListItemAvatar>
                             <ListItemText
                                 sx={{ marginLeft: '1rem' }}
