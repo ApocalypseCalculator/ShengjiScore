@@ -190,5 +190,13 @@
     "HOW_TO_PLAY_SUMMARY": {
         "en": "How to Play Shengji",
         "zh": "如何玩升级"
+    },
+    "PLAYERS": {
+        "en": "Players",
+        "zh": "玩家"
+    },
+    "SCORE_CHANGE_L": {
+        "en": "Score Change",
+        "zh": "分数变化"
     }
 }

@@ -170,7 +170,7 @@ export default function ScoreCounter(props: { disableCustomTheme?: boolean }) {
                     }
                 })
                 if (newround.changes.length > 0) {
-                    editedScoreGameData.rounds.push(newround);
+                    editedScoreGameData.rounds.unshift(newround);
                 }
                 else {
                     return previousGameData;
@@ -325,7 +325,9 @@ export default function ScoreCounter(props: { disableCustomTheme?: boolean }) {
                         </Button>
                     </DialogActions>
                 </Dialog>
-                <History openHistoryModal={openHistoryModal}
+                <History 
+                    smallScreen={smallScreen}
+                    openHistoryModal={openHistoryModal}
                     setOpenHistoryModal={setOpenHistoryModal}
                     gameData={currentGameData}
                     undoRound={undoGameRound} />
