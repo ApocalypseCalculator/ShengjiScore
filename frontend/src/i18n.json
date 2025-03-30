@@ -144,7 +144,7 @@
         "zh": "提交分数"
     },
     "HISTORY": {
-        "en": "Round History",
+        "en": "Game History",
         "zh": "历史记录"
     },
     "HISTORY_ROUND": {
@@ -212,7 +212,7 @@
         "zh": "查看玩家分数以及编辑玩家"
     },
     "INTRO_ACTIONS": {
-        "en": "Add player, view round history, or delete game here",
+        "en": "Add player, view game history, or delete game here",
         "zh": "添加玩家，查看历史记录，或删除当前局"
     },
     "INTRO_IMPORTEXPORT": {
