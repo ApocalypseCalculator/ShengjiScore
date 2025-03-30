@@ -30,7 +30,18 @@ function AboutSection(props: {
             </Typography>
             <Button variant="outlined" aria-label="about" startIcon={<Info />} onClick={() => {
                 props.setOpenModal(false);
-                introJs().start()
+                let intro = introJs();
+                intro.onafterchange(() => {
+                    let btns = document.getElementsByClassName('introjs-nextbutton');
+                    for (let i = 0; i < btns.length; i++) {
+                        (btns.item(i) as HTMLButtonElement).textContent = i18n?.text.INTRO_NEXT;
+                    }
+                    let btns2 = document.getElementsByClassName('introjs-prevbutton');
+                    for (let i = 0; i < btns2.length; i++) {
+                        (btns2.item(i) as HTMLButtonElement).textContent = i18n?.text.INTRO_PREV;
+                    }
+                });
+                intro.start();
             }}>
                 {i18n?.text.BEGIN_INTRO}
             </Button >

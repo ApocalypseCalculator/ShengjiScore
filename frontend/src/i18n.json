@@ -222,5 +222,13 @@
     "BEGIN_INTRO": {
         "en": "Quick Guide",
         "zh": "快速指南"
+    },
+    "INTRO_NEXT": {
+        "en": "Next",
+        "zh": "下一步"
+    },
+    "INTRO_PREV": {
+        "en": "Back",
+        "zh": "上一步"
     }
 }
