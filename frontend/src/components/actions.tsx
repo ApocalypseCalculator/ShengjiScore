@@ -28,7 +28,7 @@ export default function ActionsMenu(props: {
     return (
         <>
             {props.smallScreen ?
-                <Box display={'flex'} flexDirection={'row'}>
+                <Box data-intro={i18n?.text.INTRO_ACTIONS} data-step='4' display={'flex'} flexDirection={'row'}>
                     <Button disabled={props.editingScores} variant="outlined" aria-label="more-actions" component={'label'} startIcon={<MoreHoriz />} style={!props.showMenu ? { display: 'none' } : {}} onClick={(ev) => {
                         handleOpenActionsMenu(ev);
                     }}>
@@ -78,7 +78,7 @@ export default function ActionsMenu(props: {
                         </MenuItem>
                     </Menu>
                 </Box> :
-                <Box display={'flex'} flexDirection={'row'} gap={2}>
+                <Box data-intro={i18n?.text.INTRO_ACTIONS} data-step='4' display={'flex'} flexDirection={'row'} gap={2}>
                     <Button disabled={props.editingScores} variant="outlined" aria-label="add-player" startIcon={<AddBox />} style={!props.showMenu ? { display: 'none' } : {}} onClick={props.onAdd}>
                         {i18n?.text.ADD_PLAYER}
                     </Button >

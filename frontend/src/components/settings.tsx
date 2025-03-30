@@ -2,7 +2,8 @@ import * as React from 'react';
 import LanguageSelect, { LanguageContext } from "../theme/LanguageSelect";
 import ColorModeSelect from "../theme/ColorModeSelect";
 import { Box, Modal, Tooltip, IconButton, Button, Typography, Accordion, AccordionSummary, AccordionDetails } from '@mui/material';
-import { Settings as SettingsIcon, Help, GitHub, ArrowDropDown } from '@mui/icons-material';
+import { Settings as SettingsIcon, Help, GitHub, ArrowDropDown, Info } from '@mui/icons-material';
+import introJs from 'intro.js';
 
 const style = {
     position: 'absolute',
@@ -15,7 +16,9 @@ const style = {
     p: 4,
 };
 
-function AboutSection() {
+function AboutSection(props: {
+    setOpenModal: (value: boolean) => void,
+}) {
     const i18n = React.useContext(LanguageContext);
     return (
         <>
@@ -25,6 +28,12 @@ function AboutSection() {
             >
                 {i18n?.text.HELP}
             </Typography>
+            <Button variant="outlined" aria-label="about" startIcon={<Info />} onClick={() => {
+                props.setOpenModal(false);
+                introJs().start()
+            }}>
+                {i18n?.text.BEGIN_INTRO}
+            </Button >
             <Accordion>
                 <AccordionSummary
                     expandIcon={<ArrowDropDown />}
@@ -64,7 +73,7 @@ function AboutSectionButton() {
             </Button >
             <Modal open={openHelpModal} onClose={() => setOpenHelpModal(false)}>
                 <Box sx={{ ...style, width: 750, alignItems: 'center' }} display={'flex'} flexDirection={'column'} gap={2}>
-                    <AboutSection />
+                    <AboutSection setOpenModal={setOpenHelpModal} />
                 </Box>
             </Modal>
         </>
@@ -95,7 +104,7 @@ export default function Settings(props: { smallScreen: boolean }) {
                         </Typography>
                         <LanguageSelect />
                         <ColorModeSelect />
-                        <AboutSection />
+                        <AboutSection setOpenModal={setOpenModal} />
                     </Box>
                 </Modal>
             </> :

@@ -13,7 +13,7 @@ function EditScoresToggle(props: {
     toggleEditingScores: () => void,
 }) {
     const i18n = React.useContext(LanguageContext);
-    return <AbsoluteButton variant={props.editingScores ? "contained" : "outlined"} color="secondary" aria-label="edit-scores" startIcon={props.editingScores ? <LockOpen /> : <Lock />} onClick={props.toggleEditingScores}>
+    return <AbsoluteButton data-intro={i18n?.text.INTRO_EDIT_SCORES} data-step='2' variant={props.editingScores ? "contained" : "outlined"} color="secondary" aria-label="edit-scores" startIcon={props.editingScores ? <LockOpen /> : <Lock />} onClick={props.toggleEditingScores}>
         {props.editingScores ? i18n?.text.FINISH_EDIT_SCORES : i18n?.text.EDIT_SCORES}
     </AbsoluteButton >
 }
@@ -44,6 +44,7 @@ export default function GameSelector(props: {
                     flexDirection: props.smallScreen ? 'row' : 'column',
                     width: '100%',
                 }}
+                data-intro={i18n?.text.INTRO_GAME_SELECT} data-step='1'
             >
                 {
                     props.editingName && props.smallScreen ?

@@ -42,7 +42,7 @@ export default function GamePlayerList(props: {
     }
 
     return (
-        <PlayerList dense={props.smallScreen}>
+        <PlayerList dense={props.smallScreen} data-step='3' data-intro={i18n?.text.INTRO_PLAYER_LIST}>
             {
                 props.currentGameData.players.map((player: Player, i) => {
                     return (

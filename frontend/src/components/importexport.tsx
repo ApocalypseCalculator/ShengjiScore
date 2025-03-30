@@ -24,7 +24,7 @@ export default function ImportExport(props: {
     };
     return (
         props.smallScreen ?
-            <Box display={'flex'} flexDirection={'row'}>
+            <Box data-intro={i18n?.text.INTRO_IMPORTEXPORT} data-step='5' data-position='top' display={'flex'} flexDirection={'row'}>
                 <Tooltip title={i18n?.text.IMPORT_EXPORT}>
                     <IconButton disabled={props.editingScores} onClick={(ev) => {
                         handleOpenImportExportMenu(ev);
@@ -62,7 +62,7 @@ export default function ImportExport(props: {
                     <MenuItem style={!props.showExport ? { display: 'none' } : {}} onClick={props.onFileExport}>{i18n?.text.EXPORT}</MenuItem>
                 </Menu>
             </Box> :
-            <Box display={'flex'} flexDirection={'row'} gap={2}>
+            <Box data-intro={i18n?.text.INTRO_IMPORTEXPORT} data-step='5' display={'flex'} flexDirection={'row'} gap={2}>
                 <Tooltip title={i18n?.text.IMPORT}>
                     <IconButton disabled={props.editingScores} aria-label="import" tabIndex={-1} role={undefined} component={'label'}>
                         <FileUpload />

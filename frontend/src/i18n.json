@@ -198,5 +198,29 @@
     "SCORE_CHANGE_L": {
         "en": "Score Change",
         "zh": "分数变化"
+    },
+    "INTRO_GAME_SELECT": {
+        "en": "Select current game or create new game",
+        "zh": "选择当前局或新开局"
+    },
+    "INTRO_EDIT_SCORES": {
+        "en": "Use this button to edit and submit scores for this game",
+        "zh": "用此按钮编辑并提交当前局的分数"
+    },
+    "INTRO_PLAYER_LIST": {
+        "en": "View player scores and edit players here",
+        "zh": "查看玩家分数以及编辑玩家"
+    },
+    "INTRO_ACTIONS": {
+        "en": "Add player, view round history, or delete game here",
+        "zh": "添加玩家，查看历史记录，或删除当前局"
+    },
+    "INTRO_IMPORTEXPORT": {
+        "en": "Import and export game data here",
+        "zh": "导入或导出游戏数据"
+    },
+    "BEGIN_INTRO": {
+        "en": "Quick Guide",
+        "zh": "快速指南"
     }
 }
