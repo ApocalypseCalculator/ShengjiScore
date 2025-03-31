@@ -266,5 +266,9 @@
     "GAME_UNDO": {
         "en": "Undid round",
         "zh": "撤销了一轮"
+    },
+    "VERSION": {
+        "en": "v",
+        "zh": "版本 "
     }
 }

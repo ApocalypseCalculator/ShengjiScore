@@ -1,9 +1,11 @@
 import * as React from 'react';
 import LanguageSelect, { LanguageContext } from "../theme/LanguageSelect";
 import ColorModeSelect from "../theme/ColorModeSelect";
-import { Box, Modal, Tooltip, IconButton, Button, Typography, Accordion, AccordionSummary, AccordionDetails } from '@mui/material';
+import { Box, Modal, Tooltip, IconButton, Button, Typography, Accordion, AccordionSummary, AccordionDetails, Divider } from '@mui/material';
 import { Settings as SettingsIcon, Help, GitHub, ArrowDropDown, Info } from '@mui/icons-material';
 import introJs from 'intro.js';
+
+import pkg from '../../package.json';
 
 const style = {
     position: 'absolute',
@@ -76,6 +78,12 @@ function AboutSection(props: {
             >
                 {i18n?.text.MADE_BY}
             </Typography>
+            <Typography
+                component="p"
+                variant="body1"
+            >
+                {i18n?.text.VERSION}{pkg.version}
+            </Typography>
             <Button variant="outlined" aria-label="about" startIcon={<GitHub />} target={'_blank'} rel={'noopener noreferrer'} href={'https://github.com/ApocalypseCalculator/ShengjiScore'} component={'a'}>
                 {i18n?.text.SOURCE_CODE}
             </Button >
@@ -117,7 +125,7 @@ export default function Settings(props: { smallScreen: boolean }) {
                     </IconButton>
                 </Tooltip>
                 <Modal open={openModal} onClose={() => setOpenModal(false)}>
-                    <Box sx={{ ...style, width: 400 }} display={'flex'} flexDirection={'column'} gap={2}>
+                    <Box sx={{ ...style, width: 400, alignItems: 'center' }} display={'flex'} flexDirection={'column'} gap={2}>
                         <Typography
                             component="h2"
                             variant="h6"
@@ -126,6 +134,7 @@ export default function Settings(props: { smallScreen: boolean }) {
                         </Typography>
                         <LanguageSelect />
                         <ColorModeSelect />
+                        <Divider/>
                         <AboutSection setOpenModal={setOpenModal} />
                     </Box>
                 </Modal>
