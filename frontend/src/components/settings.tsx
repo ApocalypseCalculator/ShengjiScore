@@ -28,6 +28,9 @@ function AboutSection(props: {
             >
                 {i18n?.text.HELP}
             </Typography>
+            <Typography>
+                {i18n?.text.ABOUT_THE_APP}
+            </Typography>
             <Button variant="outlined" aria-label="about" startIcon={<Info />} onClick={() => {
                 props.setOpenModal(false);
                 let intro = introJs();
