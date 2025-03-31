@@ -55,8 +55,16 @@ function AboutSection(props: {
                 </AccordionSummary>
                 <AccordionDetails>
                     <Typography>
-                        Coming soon
+                        {i18n?.text.HOW_TO_PLAY_DETAILS}
                     </Typography>
+                    <Box display={'flex'} flexDirection={'row'} width={'100%'} justifyContent={'center'} gap={4} mt={2}>
+                        <Typography target={'_blank'} rel={'noopener noreferrer'} component="a" href='https://en.wikipedia.org/wiki/Sheng_ji'>
+                            English
+                        </Typography>
+                        <Typography target={'_blank'} rel={'noopener noreferrer'} component="a" href='https://zh.wikipedia.org/wiki/%E5%8D%87%E7%B4%9A_(%E6%92%B2%E5%85%8B%E7%89%8C)'>
+                            中文
+                        </Typography>
+                    </Box>
                 </AccordionDetails>
             </Accordion>
             <Typography

@@ -230,5 +230,9 @@
     "INTRO_PREV": {
         "en": "Back",
         "zh": "上一步"
+    },
+    "HOW_TO_PLAY_DETAILS": {
+        "en": "Due to Shengji's history and complexity, there are many variations and rulesets. The following resources are a great starting point for learning the game. ",
+        "zh": "升级的规则具有大量的地区差异。以下资源是新手的好起点。"
     }
 }
