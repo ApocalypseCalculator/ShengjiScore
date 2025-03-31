@@ -6,7 +6,7 @@ import { Divider, CssBaseline, Typography, Button, Dialog, DialogActions, Dialog
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { useTheme } from '@mui/material/styles';
 
-import { GameDataMap, GameData, initGameData, createPlayer, Round } from './data';
+import { GameDataMap, GameData, initGameData, createPlayer, Round, GameLogType } from './data';
 
 import { uniqueNamesGenerator, adjectives, colors, animals } from 'unique-names-generator';
 import { getNextScore, getWinningPlayerIdx } from './utils';
@@ -76,6 +76,19 @@ export default function ScoreCounter(props: { disableCustomTheme?: boolean }) {
             setGameKeys((prev) => [randomName, ...prev]);
             setCurrentGame(randomName);
             let newdata = initGameData();
+            newdata.logs.push({
+                type: GameLogType.GAME_CREATE,
+                time: Date.now(),
+                oldname: randomName,
+            })
+            newdata.players.forEach((player) => {
+                newdata.logs.push({
+                    type: GameLogType.PLAYER_ADD,
+                    time: Date.now(),
+                    user: player.id,
+                    oldname: player.name,
+                });
+            });
             setCurrentGameData(newdata);
             GLOBAL_GAME_DATA.set(randomName, newdata);
         }
@@ -98,7 +111,15 @@ export default function ScoreCounter(props: { disableCustomTheme?: boolean }) {
             }
             let idx = prev.indexOf(currentGame);
             GLOBAL_GAME_DATA.delete(currentGame);
-            GLOBAL_GAME_DATA.set(name, currentGameData);
+            let newstate = { ...currentGameData };
+            newstate.logs.push({
+                type: GameLogType.GAME_RENAME,
+                time: Date.now(),
+                oldname: currentGame,
+                newname: name,
+            })
+            GLOBAL_GAME_DATA.set(name, newstate);
+            setCurrentGameData(newstate);
             prev[idx] = name;
             setCurrentGame(name);
             return prev;
@@ -110,6 +131,14 @@ export default function ScoreCounter(props: { disableCustomTheme?: boolean }) {
         setCurrentGameData((prev) => {
             if (!prev) return prev;
             let newstate = { ...prev };
+            let oldname = newstate.players[idx].name;
+            newstate.logs.push({
+                type: GameLogType.PLAYER_RENAME,
+                time: Date.now(),
+                user: newstate.players[idx].id,
+                oldname: oldname,
+                newname: name,
+            });
             newstate.players[idx].name = name;
             GLOBAL_GAME_DATA.set(currentGame, newstate);
             return newstate;
@@ -129,6 +158,10 @@ export default function ScoreCounter(props: { disableCustomTheme?: boolean }) {
                 player.score -= change.schange;
                 player.round -= change.rchange;
             });
+            newstate.logs.push({
+                type: GameLogType.GAME_UNDO,
+                time: Date.now(),
+            })
             newstate.rounds = newstate.rounds.filter((r) => r.time !== round.time);
             GLOBAL_GAME_DATA.set(currentGame, newstate);
             return newstate;
@@ -170,7 +203,7 @@ export default function ScoreCounter(props: { disableCustomTheme?: boolean }) {
                     }
                 })
                 if (newround.changes.length > 0) {
-                    editedScoreGameData.rounds.unshift(newround);
+                    editedScoreGameData.rounds.push(newround);
                 }
                 else {
                     return previousGameData;
@@ -247,6 +280,11 @@ export default function ScoreCounter(props: { disableCustomTheme?: boolean }) {
                             setCurrentGameData((prev) => {
                                 if (!prev) return prev;
                                 let newstate = { ...prev };
+                                newstate.logs.push({
+                                    type: GameLogType.PLAYER_DELETE,
+                                    time: Date.now(),
+                                    oldname: newstate.players[idx].name,
+                                });
                                 newstate.players.splice(idx, 1);
                                 GLOBAL_GAME_DATA.set(currentGame, newstate);
                                 return newstate;
@@ -263,7 +301,14 @@ export default function ScoreCounter(props: { disableCustomTheme?: boolean }) {
                                 setCurrentGameData((prev) => {
                                     if (!prev) return prev;
                                     let newstate = { ...prev };
-                                    newstate.players.push(createPlayer());
+                                    let player = createPlayer();
+                                    newstate.players.push(player);
+                                    newstate.logs.push({
+                                        type: GameLogType.PLAYER_ADD,
+                                        time: Date.now(),
+                                        user: player.id,
+                                        oldname: player.name,
+                                    });
                                     GLOBAL_GAME_DATA.set(currentGame, newstate);
                                     return newstate;
                                 });

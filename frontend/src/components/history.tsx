@@ -2,7 +2,7 @@ import * as React from 'react';
 import { LanguageContext } from "../theme/LanguageSelect";
 import { Modal, Box, Typography, ListItem, List, ListItemText, Tooltip, IconButton } from '@mui/material';
 import { Undo } from '@mui/icons-material';
-import { GameData, Round, RoundChange } from '../data';
+import { GameData, Round, RoundChange, GameLog, GameLogType } from '../data';
 
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -61,6 +61,21 @@ function ScoreTable(props: {
     );
 }
 
+interface Event {
+    type: 'log' | 'round';
+    position: number;
+    data: GameLog | Round;
+    strdata: string;
+}
+
+const DATETIME_FORMAT = new Intl.DateTimeFormat("en-CA", {
+    year: "numeric",
+    month: "short",
+    day: "numeric",
+    hour: "numeric",
+    minute: "numeric"
+})
+
 export default function History(props: {
     smallScreen: boolean,
     openHistoryModal: boolean,
@@ -88,6 +103,60 @@ export default function History(props: {
         str += `${i18n?.text.SCORE_CHANGE} ${change.schange >= 0 ? '+' : ''}${change.schange}`;
         return str;
     }
+    function getPrettyDate(time: number): string {
+        return DATETIME_FORMAT.format(new Date(time));
+    }
+    function getGameLogString(log: GameLog): string {
+        if(log.type == GameLogType.PLAYER_RENAME) {
+            return `${getPlayerName(log.user!)}: ${i18n?.text.PLAYER_RENAME} ${log.oldname} -> ${log.newname}`;
+        }
+        else if(log.type == GameLogType.PLAYER_ADD) {
+            return `${getPlayerName(log.user!)}: ${i18n?.text.PLAYER_ADD} ${log.oldname}`;
+        }
+        else if(log.type == GameLogType.PLAYER_DELETE) {
+            return `${log.oldname}: ${i18n?.text.PLAYER_DELETE}`;
+        }
+        else if(log.type == GameLogType.GAME_RENAME) {
+            return `${i18n?.text.GAME_RENAME}: ${log.oldname} -> ${log.newname}`;
+        }
+        else if(log.type == GameLogType.GAME_CREATE) {
+            return `${i18n?.text.GAME_CREATE}: ${log.oldname}`;
+        }
+        else if(log.type == GameLogType.GAME_UNDO) {
+            return `${i18n?.text.GAME_UNDO}`;
+        }
+        return 'unknown log'
+    }
+
+    const [totalEvents, setTotalEvents] = React.useState([] as Event[]);
+    React.useEffect(() => {
+        if (!props.gameData) {
+            return;
+        }
+        const events: Event[] = props.gameData.logs.map((log, i) => {
+            return { type: 'log', data: log, position: i + 1, strdata: getGameLogString(log) };
+        });
+        props.gameData.rounds.forEach((round, i) => {
+            events.push({ type: 'round', data: round, position: i + 1, strdata: '' });
+        });
+        events.sort((a, b) => {
+            return a.data.time - b.data.time;
+        });
+        // events now ordered from oldest to newest
+        // coalesce logs if they are within 30 seconds of each other
+        // do NOT coalesce logs if they are separated by a round
+        for(let i = events.length - 2; i >= 0; i--) {
+            if(events[i].type == 'log' && events[i+1].type == 'log') {
+                if(Math.abs(events[i].data.time - events[i+1].data.time) < 30000) {
+                    events[i+1].position = events[i].position;
+                    events[i+1].strdata += '\n' + events[i].strdata;
+                    events.splice(i, 1);
+                }
+            }
+        }
+        events.reverse();
+        setTotalEvents(events);
+    }, [props.gameData]);
 
     if (!props.gameData) {
         return <></>;
@@ -105,38 +174,50 @@ export default function History(props: {
                     {i18n?.text.HISTORY}
                 </Typography>
                 {
-                    props.gameData.rounds.length == 0 ? <Typography>{i18n?.text.NO_ROUNDS}</Typography> : <List>
+                    totalEvents.length == 0 ? <Typography>{i18n?.text.NO_HISTORY}</Typography> : <List>
                         {
-                            props.gameData.rounds.map((round, idx) => {
-                                return <ListItem key={round.time} secondaryAction={
-                                    idx == 0 ? (
-                                        <Tooltip sx={{ opacity: 1 }} title={i18n?.text.UNDO}>
-                                            <IconButton size={'small'} edge="end" aria-label="add" onClick={() => {
-                                                props.undoRound(round);
-                                            }}>
-                                                <Undo />
-                                            </IconButton>
-                                        </Tooltip>
-                                    ) : <></>
-                                } disableGutters>
-                                    {
-                                        props.smallScreen ?
-                                            <ListItemText
-                                                sx={{ whiteSpace: 'pre-line' }}
-                                                primary={`${i18n?.text.HISTORY_ROUND} ${props.gameData!.rounds.length - idx}${i18n?.text.HISTORY_ROUND_P2}, ${new Date(round.time).toLocaleString()}`}
-                                                secondary={round.changes.map((change) => {
-                                                    return getScoreChange(change);
-                                                }).join('\n')}
-                                            /> :
-                                            <Box>
+                            totalEvents.map((event) => {
+                                if (event.type == 'round') {
+                                    let round = event.data as Round;
+                                    return <ListItem key={round.time} secondaryAction={
+                                        event.position == props.gameData?.rounds.length ? (
+                                            <Tooltip sx={{ opacity: 1 }} title={i18n?.text.UNDO}>
+                                                <IconButton size={'small'} edge="end" aria-label="add" onClick={() => {
+                                                    props.undoRound(round);
+                                                }}>
+                                                    <Undo />
+                                                </IconButton>
+                                            </Tooltip>
+                                        ) : <></>
+                                    } disableGutters>
+                                        {
+                                            props.smallScreen ?
                                                 <ListItemText
                                                     sx={{ whiteSpace: 'pre-line' }}
-                                                    primary={`${i18n?.text.HISTORY_ROUND} ${props.gameData!.rounds.length - idx}${i18n?.text.HISTORY_ROUND_P2}, ${new Date(round.time).toLocaleString()}`}
-                                                />
-                                                <ScoreTable data={round} getPlayerName={getPlayerName} />
-                                            </Box>
-                                    }
-                                </ListItem>
+                                                    primary={`${i18n?.text.HISTORY_ROUND} ${event.position}${i18n?.text.HISTORY_ROUND_P2} — ${getPrettyDate(round.time)}`}
+                                                    secondary={round.changes.map((change) => {
+                                                        return getScoreChange(change);
+                                                    }).join('\n')}
+                                                /> :
+                                                <Box>
+                                                    <ListItemText
+                                                        sx={{ whiteSpace: 'pre-line' }}
+                                                        primary={`${i18n?.text.HISTORY_ROUND} ${event.position}${i18n?.text.HISTORY_ROUND_P2} — ${getPrettyDate(round.time)}`}
+                                                    />
+                                                    <ScoreTable data={round} getPlayerName={getPlayerName} />
+                                                </Box>
+                                        }
+                                    </ListItem>
+                                }
+                                else if (event.type == 'log') {
+                                    return <ListItem key={event.data.time} disableGutters>
+                                        <ListItemText
+                                            sx={{ whiteSpace: 'pre-line' }}
+                                            primary={`${i18n?.text.LOG} — ${getPrettyDate(event.data.time)}`}
+                                            secondary={event.strdata}
+                                        />
+                                    </ListItem>
+                                }
                             })
                         }
                     </List>

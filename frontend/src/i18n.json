@@ -171,9 +171,9 @@
         "en": "Undo",
         "zh": "撤销"
     },
-    "NO_ROUNDS": {
+    "NO_HISTORY": {
         "en": "History is empty",
-        "zh": "尚未进行任何回合"
+        "zh": "历史记录为空"
     },
     "HELP": {
         "en": "About",
@@ -238,5 +238,33 @@
     "ABOUT_THE_APP": {
         "en": "This app is a score counter for the card game Shengji, intended to aid score tracking for offline play. ",
         "zh": "本应用是给升级辅助记分的系统，适合线下游戏使用。"
+    },
+    "LOG": {
+        "en": "Log",
+        "zh": "日志"
+    },
+    "PLAYER_RENAME": {
+        "en": "player renamed",
+        "zh": "玩家重命名"
+    },
+    "PLAYER_ADD": {
+        "en": "player joined as",
+        "zh": "玩家加入，名字为"
+    },
+    "PLAYER_DELETE": {
+        "en": "player deleted",
+        "zh": "玩家删除"
+    },
+    "GAME_RENAME": {
+        "en": "Game renamed",
+        "zh": "当前局重命名"
+    },
+    "GAME_CREATE": {
+        "en": "New game created",
+        "zh": "新开局"
+    },
+    "GAME_UNDO": {
+        "en": "Undid round",
+        "zh": "撤销了一轮"
     }
 }

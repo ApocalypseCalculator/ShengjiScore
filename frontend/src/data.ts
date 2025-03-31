@@ -76,7 +76,8 @@ export function initGameData() {
     gamedata = {
         description: '',
         players: [],
-        rounds: []
+        rounds: [],
+        logs: []
     }
     gamedata.players = Array.from(Array(4)).map(() => {
         return createPlayer();
@@ -108,6 +109,7 @@ export type GameData = {
     players: Player[];
     // list of rounds
     rounds: Round[];
+    logs: GameLog[];
 }
 
 export type Player = {
@@ -119,6 +121,25 @@ export type Player = {
     score: number;
     // current round
     round: number;
+}
+
+export enum GameLogType {
+    PLAYER_RENAME = 'ur',
+    PLAYER_ADD = 'ua',
+    PLAYER_DELETE = 'ud',
+    GAME_RENAME = 'gr',
+    GAME_CREATE = 'gc',
+    GAME_UNDO = 'gu',
+}
+
+export type GameLog = {
+    // time of log in Date.now() format
+    time: number;
+    type: GameLogType;
+    // relevant userid (if any)
+    user?: number;
+    oldname?: string;
+    newname?: string;
 }
 
 export type Round = {
